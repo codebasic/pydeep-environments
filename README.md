@@ -80,9 +80,9 @@ $ conda env create -f environment.yml
 
 environment.yml 파일은 각 플랫폼별 환경 설정 파일을 참조합니다.
 
-1. [x86_gpu.yml](environments/x86_gpu.yml)
-1. [x86_cpu.yml](environments/x86_cpu.yml)
-1. [apple_silicon.yml](environments/apple_silicon.yml)
+1. [x86_gpu.yml](x86_gpu.yml)
+1. [x86_cpu.yml](x86_cpu.yml)
+1. [apple_silicon.yml](apple_silicon.yml)
 
 Windows의 경우, TensorFlow (2.10 이하) 동작을 위해 [Microsoft Visual C++ 재배포 가능 패키지 설치 필요 (64비트)](https://aka.ms/vs/17/release/vc_redist.x64.exe)
 
@@ -102,7 +102,7 @@ source ./set_libs.sh
 conda deactivate && conda activate pydeep
 ```
 
-[set_libs.sh](environments/set_libs.sh) 참조.
+[set_libs.sh](set_libs.sh) 참조.
 
 ##  [선택적] Jupyter
 
