@@ -10,7 +10,7 @@ dependencies:
   - matplotlib
   - scikit-learn
   - pydot
-  - conda-forge::numpy~=1.20.0
+  - conda-forge::numpy
   - apple::tensorflow-deps~=2.8
   - pip:
     - tensorflow-macos~=2.8.0
