@@ -30,13 +30,13 @@ https://docs.docker.com/desktop/install/windows-install
 
 최초 실행 시, 약 3 GB 용량의 도커 이미지([codebasic/pydeep](https://hub.docker.com/r/codebasic/pydeep)) 다운로드가 실행됩니다.
 
-```
+```powershell
 docker run --name pydeep -p 8888:8888 -it codebasic/pydeep
 ```
 
 GPU 접근 설정
 
-```
+```powershell
 docker run --name pydeep-gpu -p 8888:8888 --gpus all -it codebasic/pydeep
 ```
 
