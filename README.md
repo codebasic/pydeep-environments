@@ -56,7 +56,7 @@ Conda는 패키지 관리 프로그램입니다. 소프트웨어 버전과 의�
 
 아래 절차는 [Homebrew](https://brew.sh/index_ko) 소프트웨어를 가정합니다.
 
-```
+```bash
 brew install miniforge
 conda init "$(basename "${SHELL}")"
 ```
@@ -64,7 +64,7 @@ conda init "$(basename "${SHELL}")"
 ### Linux
 
 [Miniforge](https://github.com/conda-forge/miniforge) 설치
-```
+```bash
 wget -O Miniforge3.sh "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
 ./Miniforge3.sh
 conda init "$(basename "${SHELL}")"
@@ -74,7 +74,7 @@ conda init "$(basename "${SHELL}")"
 
 다음 명령을 실행하여 설치합니다.
 
-```
+```bash
 conda env create -f environment.yml
 ```
 
@@ -96,7 +96,7 @@ Mac의 경우, Apple Silicon은 추가 설정 없이 GPU 가속 가능. Intel �
 ### Linux
 
 NVIDIA CUDA 라이브러리 탐색 경로 설정
-```
+```bash
 conda activate pydeep
 source ./set_libs.sh
 conda deactivate && conda activate pydeep
@@ -110,7 +110,7 @@ conda deactivate && conda activate pydeep
 
 주의! 한글 사용자명. 예: C:\Users\성주
 
-```
+```bash
 conda activate pydeep
 python -m ipykernel install --user --name pydeep --display-name "pydeep"
 ```
