@@ -31,13 +31,13 @@ https://docs.docker.com/desktop/install/windows-install
 최초 실행 시, 약 3 GB 용량의 도커 이미지([codebasic/pydeep](https://hub.docker.com/r/codebasic/pydeep)) 다운로드가 실행됩니다.
 
 ```
-$ docker run --name pydeep -p 8888:8888 -it codebasic/pydeep
+docker run --name pydeep -p 8888:8888 -it codebasic/pydeep
 ```
 
 GPU 접근 설정
 
 ```
-$ docker run --name pydeep-gpu -p 8888:8888 --gpus all -it codebasic/pydeep
+docker run --name pydeep-gpu -p 8888:8888 --gpus all -it codebasic/pydeep
 ```
 
 # 직접 설치 (Native)
@@ -57,17 +57,17 @@ Conda는 패키지 관리 프로그램입니다. 소프트웨어 버전과 의�
 아래 절차는 [Homebrew](https://brew.sh/index_ko) 소프트웨어를 가정합니다.
 
 ```
-$ brew install miniforge
-$ conda init "$(basename "${SHELL}")"
+brew install miniforge
+conda init "$(basename "${SHELL}")"
 ```
 
 ### Linux
 
 [Miniforge](https://github.com/conda-forge/miniforge) 설치
 ```
-$ wget -O Miniforge3.sh "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
-$ ./Miniforge3.sh
-$ conda init "$(basename "${SHELL}")"
+wget -O Miniforge3.sh "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
+./Miniforge3.sh
+conda init "$(basename "${SHELL}")"
 ```
 
 ## 딥러닝 소프트웨어
@@ -75,7 +75,7 @@ $ conda init "$(basename "${SHELL}")"
 다음 명령을 실행하여 설치합니다.
 
 ```
-$ conda env create -f environment.yml
+conda env create -f environment.yml
 ```
 
 environment.yml 파일은 각 플랫폼별 환경 설정 파일을 참조합니다.
