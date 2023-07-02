@@ -1,6 +1,5 @@
 name: pydeep
 channels:
-  - defaults
   - conda-forge
   - nvidia
 dependencies:
@@ -11,10 +10,10 @@ dependencies:
   - conda-forge::cudatoolkit=11.2
   - conda-forge::cudnn=8.1.0
   - nvidia::cuda-nvcc=11.3.58
+  - pandas
+  - matplotlib
+  - scikit-learn
   - pip:
     - tensorflow~=2.9.0
-    - pandas
-    - matplotlib
-    - scikit-learn
     - jupyterlab
     - pydot
