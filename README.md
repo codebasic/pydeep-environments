@@ -30,11 +30,19 @@ https://docs.docker.com/desktop/install/windows-install
 
 최초 실행 시, 약 3 GB 용량의 도커 이미지([codebasic/pydeep](https://hub.docker.com/r/codebasic/pydeep)) 다운로드가 실행됩니다.
 
+다음 중 실행 환경에 따라 *하나를 선택*하여 실행합니다.
+
+#### CPU 기반
+
+딥러닝 소프트웨어의 GPU 가속을 활용하지 않거나, 활용할 수 없는 경우. 
+
 ```powershell
 docker run --name pydeep -p 8888:8888 -it codebasic/pydeep
 ```
 
-GPU 접근 설정
+#### GPU 가속 활용
+
+지원하는 NVIDIA 그래픽 카드 장치가 장착되어 있는 경우 ([최신 그래픽 드라이버](https://www.nvidia.co.kr/Download/index.aspx?lang=kr) 설치가 필요할 수 있습니다.)
 
 ```powershell
 docker run --name pydeep-gpu -p 8888:8888 --gpus all -it codebasic/pydeep
@@ -57,7 +65,7 @@ Conda는 패키지 관리 프로그램입니다. 소프트웨어 버전과 의�
 아래 절차는 [Homebrew](https://brew.sh/index_ko) 소프트웨어를 가정합니다.
 
 ```bash
-brew install miniforge
+brew install miniconda
 conda init "$(basename "${SHELL}")"
 ```
 
