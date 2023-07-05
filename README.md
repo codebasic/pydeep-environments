@@ -92,14 +92,19 @@ environment.yml 파일은 각 플랫폼별 환경 설정 파일을 참조합니�
 1. [x86_cpu.yml](x86_cpu.yml)
 1. [apple_silicon.yml](apple_silicon.yml)
 
-Windows의 경우, TensorFlow (2.10 이하) 동작을 위해 [Microsoft Visual C++ 재배포 가능 패키지 설치 필요 (64비트)](https://aka.ms/vs/17/release/vc_redist.x64.exe)
-
 ## GPU 가속
 
 Winodws 및 Linux 플랫폼에서 [지원하는 NVIDIA GPU](https://developer.nvidia.com/cuda-gpus) 기반 그래픽 카드 필요.
 
-Mac의 경우, Apple Silicon은 추가 설정 없이 GPU 가속 가능. Intel 기반 맥은 GPU 가속을 지원하지 않음.
+### Windows
 
+TensorFlow (2.10 이하) 동작을 위해 [Microsoft Visual C++ 재배포 가능 패키지 설치 필요 (64비트)](https://aka.ms/vs/17/release/vc_redist.x64.exe)
+
+Tensorflow 2.11+ 에서는 직접(native) 설치를 통한 GPU 가속을 지원하지 않음. WSL2 활용 필요.
+
+### Mac
+
+Apple Silicon은 추가 설정 없이 GPU 가속 가능. Intel 기반 맥은 GPU 가속을 지원하지 않음.
 
 ### Linux
 
