@@ -82,15 +82,31 @@ conda init "$(basename "${SHELL}")"
 
 다음 명령을 실행하여 설치합니다.
 
-```bash
-conda env create -f environment.yml
-```
-
 environment.yml 파일은 각 플랫폼별 환경 설정 파일을 참조합니다.
 
 1. [x86_gpu.yml](x86_gpu.yml)
 1. [x86_cpu.yml](x86_cpu.yml)
-1. [apple_silicon.yml](apple_silicon.yml)
+
+
+### Windows
+
+```powershell
+conda env create -f environment.yml
+```
+
+### Mac
+
+[apple_silicon.sh](apple_silicon.sh) 파일 필요.
+
+```zsh
+source ./apple_silicon.sh
+```
+
+### Linux
+
+```bash
+conda env create -f environment.yml
+```
 
 ## GPU 가속
 
@@ -105,6 +121,8 @@ Tensorflow 2.11+ 에서는 직접(native) 설치를 통한 GPU 가속을 지원�
 ### Mac
 
 Apple Silicon은 추가 설정 없이 GPU 가속 가능. Intel 기반 맥은 GPU 가속을 지원하지 않음.
+
+[Apple 개발자 문서: Tensorflow-metal](https://developer.apple.com/metal/tensorflow-plugin/)
 
 ### Linux
 
@@ -124,6 +142,6 @@ conda deactivate && conda activate pydeep
 주의! 한글 사용자명. 예: C:\Users\성주
 
 ```bash
-conda activate pydeep
-python -m ipykernel install --user --name pydeep --display-name "pydeep"
+conda install -n pydeep -c conda-forge jupyterlab
+conda run -n pydeep python -m ipykernel install --user --name pydeep --display-name "pydeep"
 ```
