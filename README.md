@@ -9,11 +9,13 @@ Codebasic (c) 2023
     1. Mac (Apple Silicon/Intel x86-64bit)
     1. Linux (x86-64bit)
 
-윈도우의 경우, 직접 설치보다는 환경 구성이 완료된 도커 사용을 권장합니다. 
+윈도우와 리눅스 경우, 직접 설치보다는 환경 구성이 완료된 도커 사용을 권장합니다. 
 
-유닉스 계열 플랫폼은 직접 설치를 권장합니다.
+맥은 직접 설치를 권장합니다. 맥에서는 x86 기반 도커 이미지가 정상적으로 동작하지 않습니다.
 
-# Docker Desktop for Windows 설치
+# [Docker](https://docs.docker.com/get-started/overview/)
+## Windows
+### Docker Desktop for Windows
 
 Docker Desktop은 무료로 설치가 가능하지만 상용 라이선스 소프트웨어입니다. 개인 및 중소 규모 조직은 무료로 사용할 수 있습니다. 
 
@@ -21,31 +23,39 @@ Docker Desktop은 무료로 설치가 가능하지만 상용 라이선스 소프
 
 https://docs.docker.com/desktop/install/windows-install
 
-### 요구사항
+#### 요구사항
 
-* Windows 10+ 64비트 (x86-64)
+* Windows 10 이상 64비트 (x86-64)
 * [WSL 설치](https://learn.microsoft.com/ko-kr/windows/wsl/install#install-wsl-command)
 
-### 도커 컨테이너 실행
+## Linux (Ubuntu)
+
+[ubuntu_setup.sh](ubuntu_setup.sh) 파일 필요.
+
+```bash
+sudo source ubuntu_setup.sh
+```
+
+## 도커 컨테이너 실행
 
 최초 실행 시, 약 3 GB 용량의 도커 이미지([codebasic/pydeep](https://hub.docker.com/r/codebasic/pydeep)) 다운로드가 실행됩니다.
 
 다음 중 실행 환경에 따라 *하나를 선택*하여 실행합니다.
 
-#### CPU 기반
-
-딥러닝 소프트웨어의 GPU 가속을 활용하지 않거나, 활용할 수 없는 경우. 
-
-```powershell
-docker run --name pydeep -p 8888:8888 -it codebasic/pydeep
-```
-
-#### GPU 가속 활용
+### GPU 가속 활용
 
 지원하는 NVIDIA 그래픽 카드 장치가 장착되어 있는 경우 ([최신 그래픽 드라이버](https://www.nvidia.co.kr/Download/index.aspx?lang=kr) 설치가 필요할 수 있습니다.)
 
 ```powershell
 docker run --name pydeep-gpu -p 8888:8888 --gpus all -it codebasic/pydeep
+```
+
+### CPU 기반
+
+딥러닝 소프트웨어의 GPU 가속을 활용하지 않거나, 활용할 수 없는 경우. 
+
+```powershell
+docker run --name pydeep -p 8888:8888 -it codebasic/pydeep
 ```
 
 # 직접 설치 (Native)
