@@ -4,10 +4,9 @@
 
 # Check VENV_NAME is set
 if [ -z "$VENV_NAME" ]; then
-    echo "VENV_NAME is not set"
     VENV_NAME=pydeep
-    echo "VENV_NAME is set to $VENV_NAME"
 fi
+echo "파이썬 환경 명칭: $VENV_NAME"
 
 conda create -y -n $VENV_NAME -c conda-forge python=3.9
 echo "NumPy 설치 (BLAS 가속을 위해 빌드)"
