@@ -14,12 +14,16 @@ Codebasic (c) 2023
 맥은 [직접 설치](#mac)를 권장합니다.
 
 # [Docker](https://docs.docker.com/get-started/overview/)
-## Windows
-### Docker Desktop for Windows
 
-Docker Desktop은 무료로 설치가 가능하지만 상용 라이선스 소프트웨어입니다. 개인 및 중소 규모 조직은 무료로 사용할 수 있습니다. 
+Docker는 가상화를 위한 오픈 소스 소프트웨어입니다.
 
-정부 기관 및 대기업 환경에서 활용 시 라이선스를 검토하시기 바랍니다. 상용 라이선스 소프트웨어 설치와 활용에 대한 우려가 있는 경우, 1) 리눅스에서 도커를 설정하거나, 2) 직접 설치 절차를 진행하기 바랍니다.
+Docker Desktop은 도커 환경 관리를 위한 GUI 인터페이스 소프트웨어입니다. 무료로 설치가 가능하지만 상용 라이선스 소프트웨어입니다. 개인 및 중소 규모 조직은 무료로 사용할 수 있습니다.
+
+정부 기관 및 대기업 환경에서 Docker Desktop 활용 시 라이선스를 검토하시기 바랍니다. 상용 라이선스 소프트웨어 설치와 활용에 대한 우려가 있는 경우, 1) 리눅스에서 도커를 설정하거나, 2) 직접 설치 절차를 진행하기 바랍니다.
+
+## Docker Desktop for Windows
+
+Docker Desktop for Windows 설치
 
 https://docs.docker.com/desktop/install/windows-install
 
@@ -27,6 +31,15 @@ https://docs.docker.com/desktop/install/windows-install
 
 * Windows 10 이상 64비트 (x86-64)
 * [WSL 설치](https://learn.microsoft.com/ko-kr/windows/wsl/install#install-wsl-command)
+
+## Docker Desktop for Mac
+
+Docker Desktop for Mac 설치
+
+https://docs.docker.com/desktop/install/mac-install/
+
+애플 실리콘에서도 도커를 활용할 수 있습니다. 하지만 애플 실리콘에서는 x86 기반 도커 이미지가 정상적으로 동작하지 않을 수 있습니다. 애플 실리콘은 직접 설치를 권장합니다.
+
 
 ## Linux (Ubuntu)
 
@@ -86,12 +99,16 @@ conda env create -f x86_cpu.yml
 
 Conda 설치
 
-```bash
+```zsh
 brew install miniconda
+```
+
+설치 완료 후, 쉘에서 conda 명령을 활용할 수 있도록 설정
+```zsh
 conda init "$(basename "${SHELL}")"
 ```
 
-이후 절차는 새 터미널에서 진행합니다.
+이후 절차는 **새 터미널**에서 진행합니다. 
 
 #### 애플 실리콘
 
@@ -122,15 +139,23 @@ GPU 가속을 활용하고자 하는 경우, 도커 활용을 권장합니다. [
 
 CPU만 활용하고자 하는 경우, 다음과 같이 설치를 진행합니다. 
 
-[Miniforge](https://github.com/conda-forge/miniforge) 설치
-
-```bash
+[Miniforge](https://github.com/conda-forge/miniforge) 설치 스크립트 다운로드
+```
 wget -O Miniforge3.sh "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
-./Miniforge3.sh
-conda init "$(basename "${SHELL}")"
 ```
 
-새 터미널을 열고, [x86_cpu.yml](x86_cpu.yml) 파일을 참조하여 다음과 같이 설치를 진행합니다. 
+Miniforge 설치
+```
+./Miniforge3.sh
+```
+
+설치 완료 후, 쉘에서 conda 명령을 활용할 수 있도록 설정
+```
+conda init "$(basename "${SHELL}")"
+```
+이후 절차는 **새 터미널**에서 진행합니다. 
+
+[x86_cpu.yml](x86_cpu.yml) 파일을 참조하여 다음과 같이 설치를 진행합니다. 
 
 ```bash
 conda env create -f x86_cpu.yml
