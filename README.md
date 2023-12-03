@@ -9,9 +9,9 @@ Codebasic (c) 2023
     1. Mac (Apple Silicon/Intel x86-64bit)
     1. Linux (x86-64bit)
 
-윈도우와 리눅스 경우, 직접 설치보다는 환경 구성이 완료된 도커 사용을 권장합니다. 
+윈도우와 리눅스 경우, 직접 설치보다는 환경 구성이 완료된 [도커 사용](#docker)을 권장합니다. 
 
-맥은 직접 설치를 권장합니다. 애플 실리콘 맥에서는 x86 기반 도커 이미지가 정상적으로 동작하지 않습니다.
+맥은 [직접 설치](#mac)를 권장합니다.
 
 # [Docker](https://docs.docker.com/get-started/overview/)
 ## Windows
@@ -30,7 +30,7 @@ https://docs.docker.com/desktop/install/windows-install
 
 ## Linux (Ubuntu)
 
-[ubuntu_setup.sh](ubuntu_setup.sh) 파일 필요.
+[ubuntu_setup.sh](ubuntu_setup.sh) 파일을 참조하여 다음과 같이 도커 환경을 설정합니다.
 
 ```bash
 sudo source ubuntu_setup.sh
@@ -60,98 +60,96 @@ docker run --name pydeep -p 8888:8888 -it codebasic/pydeep
 
 # 직접 설치 (Native)
 
-제시된 절차는 오픈 소스 라이선스 소프트웨어만을 활용하고 있습니다.
+제시된 절차는 오픈 소스 라이선스 소프트웨어만을 활용하고 있습니다. 파이썬 환경 설정의 편의를 위해 Conda 소프트웨어를 활용합니다.
 
-## conda
+딥러닝 소프트웨어는 Tensorflow를 활용합니다.
 
-Conda는 패키지 관리 프로그램입니다. 소프트웨어 버전과 의존성 관리에 활용합니다.
+각 플랫폼별 환경 설정 섹션을 참조하여 설치를 진행할 수 있습니다.
 
 ### Windows
 
+GPU 가속을 활용하고자 하는 경우, 도커 활용([Docke Desktop for Windows](#docker-desktop-for-windows))을 권장합니다. Tensorflow 2.11 이후 GPU 가속 직접 설치를 지원하지 않습니다.
+
+CPU만 활용하고자 하는 경우, 다음과 같이 설치를 진행합니다.
+
 [Miniconda Windows](https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe) 다운로드 및 설치
+
+설치 후, Anaconda Powershell Prompt에서 다음 명령을 실행합니다. [x86_cpu.yml](x86_cpu.yml) 파일 참조.
+
+```powershell
+conda env create -f x86_cpu.yml
+```
 
 ### Mac
 
 아래 절차는 [Homebrew](https://brew.sh/index_ko) 소프트웨어를 가정합니다.
+
+Conda 설치
 
 ```bash
 brew install miniconda
 conda init "$(basename "${SHELL}")"
 ```
 
+이후 절차는 새 터미널에서 진행합니다.
+
+#### 애플 실리콘
+
+애플 실리콘(Apple Silicon)에서는 Apple Metal API로 GPU 가속이 가능합니다. 별도의 드라이버 설치가 필요하지 않습니다. [Apple 개발자 문서: Tensorflow-metal](https://developer.apple.com/metal/tensorflow-plugin/)
+
+
+애플 실리콘 맥에서는 x86 기반 도커 이미지가 정상적으로 동작하지 않습니다.
+
+[apple_silicon.sh](apple_silicon.sh) 파일을 참조하여 다음과 같이 설치를 진행합니다.
+
+```zsh
+source ./apple_silicon.sh
+```
+
+#### Intel Mac
+
+Intel 기반 맥은 GPU 가속을 지원하지 않습니다. x86 기반이기 때문에 [CPU 기반 도커 설정](#cpu-기반)을 활용할 수 있습니다.
+
+직접 설치를 진행하고자 하는 경우 [x86_cpu.yml](x86_cpu.yml) 파일을 참조하여 다음과 같이 설치를 진행합니다. 
+
+```bash
+conda env create -f x86_cpu.yml
+```
+
 ### Linux
 
+GPU 가속을 활용하고자 하는 경우, 도커 활용을 권장합니다. [Linux(Ubuntu) Docker](#linux-ubuntu) 참조.
+
+CPU만 활용하고자 하는 경우, 다음과 같이 설치를 진행합니다. 
+
 [Miniforge](https://github.com/conda-forge/miniforge) 설치
+
 ```bash
 wget -O Miniforge3.sh "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
 ./Miniforge3.sh
 conda init "$(basename "${SHELL}")"
 ```
 
-## 딥러닝 소프트웨어
-
-다음 명령을 실행하여 설치합니다.
-
-environment.yml 파일은 각 플랫폼별 환경 설정 파일을 참조합니다.
-
-1. [x86_gpu.yml](x86_gpu.yml)
-1. [x86_cpu.yml](x86_cpu.yml)
-
-
-### Windows
-
-```powershell
-conda env create -f environment.yml
-```
-
-### Mac
-
-[apple_silicon.sh](apple_silicon.sh) 파일 필요.
-
-```zsh
-source ./apple_silicon.sh
-```
-
-### Linux
+새 터미널을 열고, [x86_cpu.yml](x86_cpu.yml) 파일을 참조하여 다음과 같이 설치를 진행합니다. 
 
 ```bash
-conda env create -f environment.yml
+conda env create -f x86_cpu.yml
 ```
-
-## GPU 가속
-
-Winodws 및 Linux 플랫폼에서 [지원하는 NVIDIA GPU](https://developer.nvidia.com/cuda-gpus) 기반 그래픽 카드 필요.
-
-### Windows
-
-TensorFlow (2.10 이하) 동작을 위해 [Microsoft Visual C++ 재배포 가능 패키지 설치 필요 (64비트)](https://aka.ms/vs/17/release/vc_redist.x64.exe)
-
-Tensorflow 2.11+ 에서는 직접(native) 설치를 통한 GPU 가속을 지원하지 않음. WSL2 활용 필요.
-
-### Mac
-
-Apple Silicon은 추가 설정 없이 GPU 가속 가능. Intel 기반 맥은 GPU 가속을 지원하지 않음.
-
-[Apple 개발자 문서: Tensorflow-metal](https://developer.apple.com/metal/tensorflow-plugin/)
-
-### Linux
-
-NVIDIA CUDA 라이브러리 탐색 경로 설정
-```bash
-conda activate pydeep
-source ./set_libs.sh
-conda deactivate && conda activate pydeep
-```
-
-[set_libs.sh](set_libs.sh) 참조.
 
 ##  [선택적] Jupyter
 
-코드 작성 환경 (IDE) Jupyter Lab 설치.
+코드 작성 환경 (IDE) Jupyter Lab 설치. [직접 설치](#직접-설치-native)를 진행한 경우를 가정합니다. 
 
-주의! 한글 사용자명. 예: C:\Users\성주
+도커 환경을 활용하는 경우는 설치와 설정이 완료되어 있습니다.
+
+Jupyter Lab 설치
 
 ```bash
-conda install -n pydeep -c conda-forge jupyterlab
+conda run -n pydeep pip install jupyterlab
+```
+
+파이썬 환경을 주피터 커널로 등록합니다. 주의! 한글 사용자명. 예: C:\Users\성주
+
+```bash
 conda run -n pydeep python -m ipykernel install --user --name pydeep --display-name "pydeep"
 ```
