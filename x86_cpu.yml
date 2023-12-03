@@ -5,12 +5,12 @@ channels:
 dependencies:
   - python=3.9
   - pip
-  - conda-forge::numpy~=1.20.0
+  - conda-forge::numpy~=1.25.0
   - conda-forge::libblas=*=*blis
   - pandas
   - matplotlib
   - scikit-learn
   - pip:
-    - tensorflow-cpu~=2.9.0
+    - tensorflow-cpu~=2.15.0
     - pydot
     - keras-tuner
