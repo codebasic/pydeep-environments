@@ -10,7 +10,7 @@ dependencies:
   - pandas
   - matplotlib
   - scikit-learn
-  - pip:
-    - tensorflow-cpu~=2.15.0
-    - pydot
-    - keras-tuner
+  - tensorflow-cpu~=2.16.0
+  - keras~=3.3.0
+  - keras-tuner~=1.4.0
+  - pydot
