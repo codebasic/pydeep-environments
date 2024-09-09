@@ -27,7 +27,7 @@ Docker Desktop for Windows 설치
 
 https://docs.docker.com/desktop/install/windows-install
 
-#### 요구사항
+### 요구사항
 
 * Windows 10 이상 64비트 (x86-64)
 * [WSL 설치](https://learn.microsoft.com/ko-kr/windows/wsl/install#install-wsl-command)
@@ -39,7 +39,6 @@ Docker Desktop for Mac 설치
 https://docs.docker.com/desktop/install/mac-install/
 
 애플 실리콘에서도 도커를 활용할 수 있습니다. 하지만 애플 실리콘에서는 x86 기반 도커 이미지가 정상적으로 동작하지 않을 수 있습니다. 애플 실리콘은 직접 설치를 권장합니다.
-
 
 ## Linux (Ubuntu)
 
@@ -87,7 +86,15 @@ CPU만 활용하고자 하는 경우, 다음과 같이 설치를 진행합니다
 
 [Miniconda Windows](https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe) 다운로드 및 설치
 
-설치 후, Anaconda Powershell Prompt에서 다음 명령을 실행합니다. [x86_cpu.yml](x86_cpu.yml) 파일 참조.
+설치 후, Anaconda Powershell Prompt에서 다음 명령을 실행합니다.
+
+NVIDIA GPU가 설치된 경우 [x86_gpu.yml](x86_gpu.yml) 파일 참조.
+
+```powershell
+conda env create -f x86_gpu.yml
+```
+
+NVIDIA GPU가 없는 경우 [x86_cpu.yml](x86_cpu.yml) 파일 참조.
 
 ```powershell
 conda env create -f x86_cpu.yml
