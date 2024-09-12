@@ -3,7 +3,6 @@ channels:
   - pytorch
   - nvidia
   - conda-forge
-  - defaults
 dependencies:
   - python=3.10
   - pytorch
@@ -11,9 +10,10 @@ dependencies:
   - torchaudio
   - pytorch-cuda=12.4
   - cudatoolkit
+  - keras~=3.4.0
   - pandas
   - matplotlib
   - scikit-learn
   - conda-forge::ipykernel
-  - keras~=3.3.0
-
+  - conda-forge::jupyterlab
+  - conda-forge::ipywidgets
