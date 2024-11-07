@@ -1,6 +1,10 @@
 #!/bin/bash
 # 환경 이름을 인자로 받기
 VENV_NAME=$1  # 첫 번째 인자를 환경 이름으로 사용
+# 인자가 없는 경우 기본값 설정
+if [ -z "$VENV_NAME" ]; then
+    VENV_NAME="tensorflow"  # 기본값: tensorflow
+fi
 
 PYTHON_VERSION=3.10
 NUMPY_VERSION=1.25.0
@@ -55,7 +59,7 @@ fi
 
 # Conda 환경 목록에서 환경 이름이 존재하는지 확인
 if conda env list | grep -q "^\s*${VENV_NAME}\s"; then
-    echo "환경 '${VENV_NAME}'이(가) 이미 존재합니다."
+    echo "환경 '${VENV_NAME}'이(가) 이미 존재합니다."; exit 1
 else
     echo "환경 '${VENV_NAME}'이(가) 존재하지 않습니다. 새 환경을 생성합니다..."
     conda create -y -n $VENV_NAME -c conda-forge python=$PYTHON_VERSION ${PYDATA_PACKAGES}
