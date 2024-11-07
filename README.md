@@ -121,12 +121,14 @@ source ./apple_silicon.sh
 
 Jupyter Lab 설치
 
+콘다 환경이 생성되어 있고, 명칭이 "tensorflow"인 경우를 가정합니다. 다른 경우, 환경 변수에서 명칭을 변경한 뒤 사용하기 바랍니다.
+
 ```bash
-conda run -n pydeep pip install jupyterlab
+ENV_NAME=tensorflow conda run -n $ENV_NAME pip install jupyterlab
 ```
 
 파이썬 환경을 주피터 커널로 등록합니다. 주의! 한글 사용자명. 예: C:\Users\성주
 
 ```bash
-conda run -n pydeep python -m ipykernel install --user --name pydeep --display-name "pydeep"
+ENV_NAME=tensorflow conda run -n $ENV_NAME python -m ipykernel install --user --name $ENV_NAME --display-name $ENV_NAME
 ```
