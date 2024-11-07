@@ -1,15 +1,12 @@
-name: pydeep
+name: tensorflow
 channels:
   - conda-forge
   - defaults
 dependencies:
   - python=3.10
   - pip
-  - conda-forge::numpy~=1.25.0
-  - conda-forge::libblas=*=*blis
   - pandas
   - matplotlib
   - scikit-learn
   - pip:
-    - tensorflow-cpu~=2.16.0
-    - keras~=3.3.0
+    - tensorflow-cpu~=2.17.0
