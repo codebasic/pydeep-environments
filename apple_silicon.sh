@@ -9,7 +9,7 @@ fi
 PYTHON_VERSION=3.10
 NUMPY_VERSION=1.25.0
 TENSORFLOW_VERSION=2.17.0
-TORCH_VERSION=2.2.0
+TORCH_VERSION=2.5.0
 KERAS_VERSION=3.6.0
 
 # 공통 패키지 목록
@@ -62,7 +62,8 @@ if conda env list | grep -q "^\s*${VENV_NAME}\s"; then
     echo "환경 '${VENV_NAME}'이(가) 이미 존재합니다."; exit 1
 else
     echo "환경 '${VENV_NAME}'이(가) 존재하지 않습니다. 새 환경을 생성합니다..."
-    conda create -y -n $VENV_NAME -c conda-forge python=$PYTHON_VERSION ${PYDATA_PACKAGES}
+    conda create -y -n $VENV_NAME -c conda-forge python=$PYTHON_VERSION \
+        pandas scikit-learn matplotlib pydot ipykernel ipywidgets sentencepiece
 fi
 
 # TensorFlow 설치
