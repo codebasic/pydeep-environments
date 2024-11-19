@@ -34,7 +34,7 @@ Docker Desktop은 도커 환경 관리를 위한 GUI 인터페이스 소프트�
 
 ### Linux (Ubuntu)
 
-[ubuntu_setup.sh](ubuntu_setup.sh) 파일을 참조하여 다음과 같이 도커 환경을 설정합니다.
+[ubuntu_setup.sh](https://github.com/codebasic/pydeep-environments/blob/main/ubuntu_setup.sh) 파일을 참조하여 다음과 같이 도커 환경을 설정합니다.
 
 ```bash
 sudo source ubuntu_setup.sh
@@ -104,13 +104,14 @@ conda init "$(basename "${SHELL}")"
 
 #### 애플 실리콘
 
-애플 실리콘(Apple Silicon)에서는 Apple Metal API로 GPU 가속이 가능합니다. 별도의 드라이버 설치가 필요하지 않습니다.
 [Apple 개발자 문서: Tensorflow-metal](https://developer.apple.com/metal/tensorflow-plugin/)
 
-[apple_silicon.sh](apple_silicon.sh) 파일을 참조하여 다음과 같이 설치를 진행합니다.
+애플 실리콘(Apple Silicon)에서는 Apple Metal API로 GPU 가속이 가능합니다. 별도의 드라이버 설치가 필요하지 않습니다.
 
-```zsh
-source ./apple_silicon.sh
+[apple_silicon.sh](https://github.com/codebasic/pydeep-environments/blob/main/apple_silicon.sh) 파일을 참조하여 다음과 같이 설치를 진행합니다.
+
+```sh
+bash ./apple_silicon.sh
 ```
 
 ### [선택적] Jupyter
