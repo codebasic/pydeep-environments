@@ -109,7 +109,8 @@ if conda info --envs | awk '{print $1}' | grep -qx "${VENV_NAME}"; then
     exit 1
 else
     echo "환경 '${VENV_NAME}'을(를) 생성합니다..."
-    if ! conda create -y -n "$VENV_NAME" -c conda-forge python="$PYTHON_VERSION" "${PYDATA_PACKAGES[@]}"; then
+    if ! conda create -y -n "$VENV_NAME" -c conda-forge python="$PYTHON_VERSION" \
+        numpy="$NUMPY_VERSION" "${PYDATA_PACKAGES[@]}"; then
         echo "오류: Conda 환경 생성에 실패했습니다. 로그를 확인하세요."
         exit 3
     fi
