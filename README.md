@@ -36,8 +36,8 @@ Docker Desktop은 도커 환경 관리를 위한 GUI 인터페이스 소프트�
 
 [ubuntu_setup.sh](https://github.com/codebasic/pydeep-environments/blob/main/ubuntu_setup.sh) 파일을 참조하여 다음과 같이 도커 환경을 설정합니다.
 
-```bash
-sudo source ubuntu_setup.sh
+```sh
+sudo bash ubuntu_setup.sh
 ```
 
 ### 도커 컨테이너 실행
@@ -48,7 +48,7 @@ sudo source ubuntu_setup.sh
 
 #### GPU 가속 활용
 
-지원하는 NVIDIA 그래픽 카드 장치가 장착되어 있는 경우 ([최신 그래픽 드라이버](https://www.nvidia.co.kr/Download/index.aspx?lang=kr) 설치가 필요할 수 있습니다.)
+지원하는 NVIDIA 그래픽 카드 장치가 장착되어 있는 경우. 장치의 [드라이버](https://www.nvidia.co.kr/drivers) 설치 및 갱신이 필요할 수 있습니다.
 
 ```powershell
 docker run --name pydeep-gpu -p 8888:8888 --gpus all -it codebasic/pydeep
@@ -64,54 +64,61 @@ docker run --name pydeep -p 8888:8888 -it codebasic/pydeep
 
 ## 직접 설치 (Native)
 
-제시된 절차는 오픈 소스 라이선스 소프트웨어만을 활용하고 있습니다. 파이썬 환경 설정의 편의를 위해 Conda 소프트웨어를 활용합니다.
+### Miniconda 설치
 
-딥러닝 소프트웨어는 Tensorflow를 활용합니다.
+Conda 환경 관리를 위해 Miniconda 설치 파일을 다운로드하고 설치합니다. Miniconda는 Python 환경을 손쉽게 관리할 수 있는 도구입니다.
 
-각 플랫폼별 환경 설정 섹션을 참조하여 설치를 진행할 수 있습니다.
+#### Miniconda Window
 
-### Windows
+[Miniconda Windows Installer](https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe) 다운로드 및 실행 (설치 마법사)
 
-GPU 가속을 활용하고자 하는 경우, 도커 활용([Docke Desktop for Windows](#docker-desktop-for-windows))을 권장합니다. Tensorflow 2.11 이후 GPU 가속 직접 설치를 지원하지 않습니다.
+#### Miniconda Mac
 
-CPU만 활용하고자 하는 경우, 다음과 같이 설치를 진행합니다.
-
-[Miniconda Windows](https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe) 다운로드 및 설치
-
-설치 후, Anaconda Powershell Prompt에서 다음 명령을 실행합니다.
-
-```powershell
-conda env create -f x86_cpu.yml
-```
-
-### Mac
-
-아래 절차는 [Homebrew](https://brew.sh/index_ko) 소프트웨어를 가정합니다.
-
-Conda 설치
-
-```zsh
-brew install miniconda
+```sh
+mkdir -p ~/miniconda3
+curl https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-arm64.sh -o ~/miniconda3/miniconda.sh
+bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3
+rm ~/miniconda3/miniconda.sh
 ```
 
 설치 완료 후, 쉘에서 conda 명령을 활용할 수 있도록 설정
 
-```zsh
-conda init "$(basename "${SHELL}")"
+```sh
+conda init --all
 ```
 
 이후 절차는 **새 터미널**에서 진행합니다.
 
-#### 애플 실리콘
+### Windows
 
-[Apple 개발자 문서: Tensorflow-metal](https://developer.apple.com/metal/tensorflow-plugin/)
+GPU 가속을 활용하고자 하는 경우, 도커 활용([Docke Desktop for Windows](#docker-desktop-for-windows))을 권장합니다. 하지만 직접 설치를 원할 경우 아래 절차를 따르십시오.
 
-애플 실리콘(Apple Silicon)에서는 Apple Metal API로 GPU 가속이 가능합니다. 별도의 드라이버 설치가 필요하지 않습니다.
+#### 텐서플로우 환경
 
-[apple_silicon.sh](https://github.com/codebasic/pydeep-environments/blob/main/apple_silicon.sh) 파일을 참조하여 다음과 같이 설치를 진행합니다.
+```powershell
+conda create --name tensorflow python=3.10
+conda activate tensorflow
+```
+
+활성화된 환경에서 [Tensorflow](https://www.tensorflow.org/install) 문서의 설치 절차를 따릅니다.
+
+#### PyTorch 환경
+
+```powershell
+conda create --name pytorch python=3.10
+conda activate pytorch
+```
+
+활성화된 환경에서 [PyTorch](https://pytorch.org/get-started/locally/) 문서의 설치 절차를 따릅니다.
+
+### Mac
+
+애플 실리콘(Apple Silicon)에서는 Apple Metal API로 GPU 가속이 가능합니다. 별도의 드라이버 설치가 필요하지 않습니다. [Apple 개발자 문서: Tensorflow-metal](https://developer.apple.com/metal/tensorflow-plugin/)
+
+[apple_silicon.sh](https://github.com/codebasic/pydeep-environments/blob/main/apple_silicon.sh) 파일을 참조하여 설치를 진행합니다.
 
 ```sh
-bash ./apple_silicon.sh
+bash ./apple_silicon.sh --help
 ```
 
 ### [선택적] Jupyter
