@@ -137,3 +137,15 @@ if [[ "$BUILD_NUMPY" == true ]]; then
 fi
 
 echo "설치가 완료되었습니다!"
+
+# 환경 사용 안내 메시지 출력
+echo
+echo "=================================================="
+echo "설치된 Conda 환경 '${VENV_NAME}'을(를) 사용하려면:"
+echo "  1. Conda 환경 활성화: conda activate ${VENV_NAME}"
+echo "  2. 필요한 작업 수행"
+echo "  3. 환경 비활성화: conda deactivate"
+echo
+echo "참고: 환경을 제거하려면 다음 명령을 실행하세요:"
+echo "  conda remove --name ${VENV_NAME} --all"
+echo "=================================================="
