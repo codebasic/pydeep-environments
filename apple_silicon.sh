@@ -7,13 +7,13 @@ if [ -z "$VENV_NAME" ]; then
 fi
 
 PYTHON_VERSION=3.10
-NUMPY_VERSION=1.25.0
+NUMPY_VERSION=1.26.0
 TENSORFLOW_VERSION=2.17.0
 TORCH_VERSION=2.5.0
 KERAS_VERSION=3.6.0
 
 # 공통 패키지 목록
-PYDATA_PACKAGES="pandas scikit-learn matplotlib pydot ipykernel ipywidgets sentencepiece"
+PYDATA_PACKAGES=("pandas" "scikit-learn" "matplotlib" "pydot" "ipykernel" "ipywidgets" "sentencepiece")
 
 echo -e '\033[1;36m'
 echo ' ██████╗ ██████╗ ██████╗ ███████╗██████╗  █████╗ ███████╗██╗ ██████╗'
@@ -47,42 +47,41 @@ OS_TYPE="$(uname -s)"
 ARCHITECTURE="$(uname -m)"
 if [[ "$OS_TYPE" != "Darwin" || "$ARCHITECTURE" != "arm64" ]]; then
     echo "오류: 이 스크립트는 Apple Silicon (MacOS ARM64)에서만 지원됩니다."
-    exit 1
+    return 1
 fi
 echo "플랫폼: Mac (Apple Silicon)"
 
 # 환경 이름이 "tensorflow" 또는 "pytorch"인지 확인
 if [[ "$VENV_NAME" != "tensorflow" && "$VENV_NAME" != "pytorch" ]]; then
     echo "오류: 환경 이름은 'tensorflow' 또는 'pytorch' 중 하나여야 합니다."
-    exit 1
+    return 1
 fi
 
 # Conda 환경 목록에서 환경 이름이 존재하는지 확인
 if conda env list | grep -q "^\s*${VENV_NAME}\s"; then
-    echo "환경 '${VENV_NAME}'이(가) 이미 존재합니다."; exit 1
+    echo "환경 '${VENV_NAME}'이(가) 이미 존재합니다."; return 1
 else
     echo "환경 '${VENV_NAME}'이(가) 존재하지 않습니다. 새 환경을 생성합니다..."
-    conda create -y -n $VENV_NAME -c conda-forge python=$PYTHON_VERSION \
-        pandas scikit-learn matplotlib pydot ipykernel ipywidgets sentencepiece
+    conda create -y -n "$VENV_NAME" -c conda-forge python="$PYTHON_VERSION" "${PYDATA_PACKAGES[@]}"
 fi
 
 # TensorFlow 설치
-if [ "$VENV_NAME" == "tensorflow" ]; then
-    echo "Apple Silicon에서 TensorFlow와 관련 패키지를 설치합니다..."
+if [[ "$VENV_NAME" == "tensorflow" ]]; then
+    echo "TensorFlow 기반 패키지를 설치합니다..."
     conda run -n $VENV_NAME pip install tensorflow~=$TENSORFLOW_VERSION
     echo "TensorFlow Metal 패키지를 설치합니다..."
     conda run -n $VENV_NAME pip install tensorflow-metal
     # # NumPy를 빌드 및 설치
-    # build_and_install_numpy "$VENV_NAME" "$NUMPY_VERSION"
+    build_and_install_numpy "$VENV_NAME" "$NUMPY_VERSION"
 
 # PyTorch 설치
-elif [ "$VENV_NAME" == "pytorch" ]; then
-    echo "PyTorch 패키지를 설치합니다..."
+elif [[ "$VENV_NAME" == "pytorch" ]]; then
+    echo "PyTorch 기반 패키지를 설치합니다..."
     conda install -y -n $VENV_NAME -c pytorch pytorch=$TORCH_VERSION torchvision torchaudio
     echo "Keras 패키지를 설치합니다..."
     conda run -n $VENV_NAME pip install keras~=$KERAS_VERSION
     # # NumPy를 빌드 및 설치
-    # build_and_install_numpy "$VENV_NAME" "$NUMPY_VERSION"
+    build_and_install_numpy "$VENV_NAME" "$NUMPY_VERSION"
 fi
 
 echo "설치가 완료되었습니다!"
