@@ -1,6 +1,7 @@
 import argparse
 import subprocess
 import os, sys, platform
+from datetime import datetime
 from packaging.version import Version
 
 # Global variables
@@ -156,7 +157,7 @@ def print_banner():
  ╚═════╝ ╚═════╝ ╚═════╝ ╚══════╝╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝ ╚═════╝
 """
     print(f"\033[1;36m{banner}\033[0m")
-    print("\033[1;32m코드베이직 (c) 2015-2024\033[0m")
+    print(f"\033[1;32m코드베이직 (c) 2015-{datetime.now().year}\033[0m")
     print("딥러닝 환경 설정 스크립트\n")
 
 def main():
