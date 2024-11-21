@@ -191,4 +191,5 @@ def main():
 
 if __name__ == "__main__":
     print_banner()
+    print_banner()
     main()
