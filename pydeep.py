@@ -145,6 +145,20 @@ def print_usage_instructions(env_name):
     print(f"  conda remove --name {env_name} --all")
     print("==================================================")
 
+def print_banner():
+    """스크립트 실행 시 배너 헤드를 출력합니다."""
+    banner = r"""
+ ██████╗ ██████╗ ██████╗ ███████╗██████╗  █████╗ ███████╗██╗ ██████╗
+██╔════╝██╔═══██╗██╔══██╗██╔════╝██╔══██╗██╔══██╗██╔════╝██║██╔════╝
+██║     ██║   ██║██║  ██║█████╗  ██████╔╝███████║███████╗██║██║     
+██║     ██║   ██║██║  ██║██╔══╝  ██╔══██╗██╔══██║╚════██║██║██║     
+╚██████╗╚██████╔╝██████╔╝███████╗██████╔╝██║  ██║███████║██║╚██████╗
+ ╚═════╝ ╚═════╝ ╚═════╝ ╚══════╝╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝ ╚═════╝
+"""
+    print(f"\033[1;36m{banner}\033[0m")
+    print("\033[1;32m코드베이직 (c) 2015-2024\033[0m")
+    print("Apple Silicon 딥러닝 환경 설정 스크립트\n")
+
 def main():
     parser = argparse.ArgumentParser(description="코드베이직 딥러닝 환경 설정")
     parser.add_argument("env_name", choices=["tensorflow", "pytorch"], help="생성할 환경 명칭")
@@ -175,4 +189,5 @@ def main():
     print_usage_instructions(env_name)
 
 if __name__ == "__main__":
+    print_banner()
     main()
