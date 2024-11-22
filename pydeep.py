@@ -150,6 +150,8 @@ def install_tensorflow(env_name, gpu=None):
     package_name = "tensorflow"
     if gpu == 'cuda':
         package_name += "[and-cuda]"
+    elif gpu is None:
+        package_name += "-cpu"
         
     run_command(["conda", "run", "-n", env_name, "pip", "install", f"{package_name}~={TENSORFLOW_VERSION}"])
 
@@ -263,6 +265,8 @@ def main():
     # Install frameworks
     if env_name == "tensorflow":
         print(f"TensorFlow {TENSORFLOW_VERSION} {messages['INFO']['PROCEED_INSTALL']}")
+        if system == "windows":
+            gpu = None
         install_tensorflow(env_name, gpu)
 
     elif env_name == "pytorch":
