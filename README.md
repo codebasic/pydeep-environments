@@ -66,32 +66,20 @@ docker run --name pydeep -p 8888:8888 -it codebasic/pydeep
 
 ### 1. Miniconda 설치
 
-Conda 환경 관리를 위해 Miniconda 설치 파일을 다운로드하고 설치합니다. Miniconda는 Python 환경을 손쉽게 관리할 수 있는 도구입니다.
+Conda 환경 관리를 위해 Miniconda 설치 파일을 다운로드하고 설치합니다. Miniconda는 Python 환경을 손쉽게 관리할 수 있는 무료 소프트웨어입니다.
 
 #### Miniconda Window
 
 [Miniconda Windows Installer](https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe) 다운로드 및 실행 (설치 마법사)
 
-#### Miniconda Mac
+#### Miniconda Mac/Linux
 
-```sh
-mkdir -p ~/miniconda3
-curl https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-arm64.sh -o ~/miniconda3/miniconda.sh
-bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3
-rm ~/miniconda3/miniconda.sh
-```
-
-설치 완료 후, 쉘에서 conda 명령을 활용할 수 있도록 설정
-
-```sh
-conda init --all
-```
-
-이후 절차는 **새 터미널**에서 진행합니다.
+[Miniconda 빠른 명령줄 설치](https://docs.anaconda.com/miniconda/install/#quick-command-line-install) 문서에서 절차와 명령을 참조하여 실행합니다.
 
 ### 2. 설치 스크립트 실행
 
-설치 스크립트는 딥러닝 환경(TensorFlow 또는 PyTorch)을 자동으로 설정하는 도구입니다. 아래 절차를 따라 진행하세요.
+[pydeep.py](pydeep.py) 설치 스크립트는 딥러닝 환경(TensorFlow 또는 PyTorch)을 자동으로 설정하는 도구입니다.
+아래 절차를 따라 진행하세요.
 
 #### 실행 환경 준비
 
@@ -100,7 +88,7 @@ conda init --all
 
 #### 설치 절차
 
-1. [pydeep.py](pydeep.py)를 다운로드합니다.
+1. [pydeep.py](pydeep.py) 설치 스크립트를 다운로드합니다.
    * 기본적으로 다운로드된 파일은 사용자의 "다운로드" 폴더에 저장됩니다.
 2. 명령줄 인터페이스에서 다운로드된 파일이 있는 디렉터리로 이동합니다:
 
