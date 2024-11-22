@@ -83,6 +83,11 @@ Windows에서는 Tensorflow CUDA 지원 GPU 가속이 어렵습니다.
     }
 }
 
+commands = {
+    'CONDA_INSTALL': ["conda", "install", "-y",],
+    'CONDA_RUN': ["conda", "run", "--no-capture-output" ],
+}
+
 def is_supported_platform(system, machine):
     """
     시스템 및 아키텍처가 지원되는지 확인합니다.
@@ -153,11 +158,11 @@ def install_tensorflow(env_name, gpu=None):
     elif gpu is None:
         package_name += "-cpu"
         
-    run_command(["conda", "run", "-n", env_name, "pip", "install", f"{package_name}~={TENSORFLOW_VERSION}"])
+    run_command(commands['CONDA_RUN'] + ["-n", env_name, "--no-capture-output", "pip", "install", f"{package_name}~={TENSORFLOW_VERSION}"])
 
     if gpu == 'metal':
         print("Apple Silicon Metal 가속 사용을 위한 Tensorflow-Metal 설치")
-        run_command(["conda", "run", "-n", env_name, "pip", "install", "tensorflow-metal"])
+        run_command(commands['CONDA_RUN'] + ["-n", env_name,  "pip", "install", "tensorflow-metal"])
   
 def install_pytorch(env_name, gpu=None):
     """PyTorch 및 관련 패키지 설치."""
@@ -167,11 +172,10 @@ def install_pytorch(env_name, gpu=None):
         channels.append("nvidia")
         packages.append(f"pytorch-cuda={CUDA_VERSION}")
     
-    run_command(["conda", "install", "-y", "-n", env_name,] + packages + format_conda_channels(channels))
+    run_command(commands['CONDA_INSTALL'] + ["-n", env_name,] + packages + format_conda_channels(channels))
 
     # Keras 설치
-    run_command([
-        "conda", "run", "--no-capture-output", "-n", env_name,
+    run_command(commands['CONDA_RUN'] + ["-n", env_name,
         "pip", "install", f"keras~={KERAS_VERSION}"
     ])
 
