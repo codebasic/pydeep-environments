@@ -171,6 +171,8 @@ def install_pytorch(env_name, gpu=None):
     if gpu == 'cuda':
         channels.append("nvidia")
         packages.append(f"pytorch-cuda={CUDA_VERSION}")
+    elif gpu is None:
+        packages.append("cpuonly")
     
     run_command(commands['CONDA_INSTALL'] + ["-n", env_name,] + packages + format_conda_channels(channels))
 
