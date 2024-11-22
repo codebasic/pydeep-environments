@@ -239,7 +239,7 @@ def main():
     elif system == "windows" and env_name == "tensorflow":
         print(messages['WARNING']['WINDOWS_TENSORFLOW'])
         # 중단 여부 확인
-        if not confirm_proceed(messages['USER_PROMPT']['ABORT'], default="y"):
+        if confirm_proceed(messages['USER_PROMPT']['ABORT'], default="y"):
             print(messages['INFO']['ABORT'])
             sys.exit(0)
 
