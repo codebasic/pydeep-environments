@@ -47,23 +47,22 @@ SUPPORTED_SYSTEMS = {
 messages = {
     "WARNING": {
         "NO_GPU": "GPU가 감지되지 않았습니다.",
-        "WINDOWS_TENSORFLOW": """
-Windows에서는 Tensorflow CUDA 지원 GPU 가속이 어렵습니다.
-1. Windows의 WSL2 또는 Docker를 사용하여 GPU 가속을 활성화할 수 있습니다.
-2. PyTorch는 Windows에서 CUDA 지원 GPU 가속을 지원합니다. 
-   PyTorch를 설치하려면 설치 스크립트에서 'pytorch'로 선택하세요.
-3. 설치를 계속 진행하면 CPU용 TensorFlow가 설치됩니다.
-"""
+        "WINDOWS_TENSORFLOW": '\n'.join([
+            'Windows에서는 Tensorflow CUDA 지원 GPU 가속이 어렵습니다.',
+            '1. Windows의 WSL2 또는 Docker를 사용하여 GPU 가속을 활성화할 수 있습니다.',
+            "2. PyTorch는 Windows에서 CUDA 지원 GPU 가속을 지원합니다.\n  PyTorch를 설치하려면 설치 스크립트에서 'pytorch'로 선택하세요.",
+            '3. 설치를 계속 진행하면 CPU용 TensorFlow가 설치됩니다.',
+        ]),
     },
     "USER_PROMPT": {'PROCEED': "진행하시겠습니까?", 'ABORT': "중단하시겠습니까?"},
     "ERROR": {
-        "UNSUPPORTED_PLATFORM": """
-지원되지 않는 플랫폼 또는 아키텍처입니다.
-지원되는 플랫폼:
-  - windows: amd64
-  - linux: x86_64
-  - darwin: x86_64, arm64
-""",
+        "UNSUPPORTED_PLATFORM": '\n'.join([
+            "지원되지 않는 플랫폼 또는 아키텍처입니다.",
+            "지원되는 플랫폼:",
+            "\t- windows: amd64",
+            "\t- linux: x86_64",
+            "\t- darwin: x86_64, arm64",
+        ]),
         "CONDA_ENV_EXISTS": "이미 존재하는 Conda 환경입니다."
     },
     "INFO": {
@@ -71,15 +70,7 @@ Windows에서는 Tensorflow CUDA 지원 GPU 가속이 어렵습니다.
         "CREATE_CONDA_ENV": "Conda 환경 생성 중...",
         "ABORT": "작업이 중단되었습니다.",
         "REMOVE_ENV": "환경을 제거하려면 다음 명령어를 실행하세요: conda remove --name {env_name} --all",
-        "USAGE": """
-%(prog)s [tensorflow | pytorch] [--build-numpy] [--cuda-override]
-
-사용 예:
-  %(prog)s tensorflow                TensorFlow 환경 생성
-  %(prog)s pytorch                   PyTorch 환경 생성
-  %(prog)s tensorflow --build-numpy  TensorFlow 환경 생성 및 NumPy 소스 빌드
-  %(prog)s pytorch --cuda-override   GPU 감지 실패 시 강제로 CUDA 설치 시도
-""",
+        'BUILD_NUMPY': "NumPy {NUMPY_VERSION} 소스 빌드",
     }
 }
 
@@ -183,7 +174,7 @@ def install_pytorch(env_name, gpu=None):
 
 def build_numpy(env_name):
     """Build and install NumPy from source."""
-    print(f"NumPy {NUMPY_VERSION} 소스 빌드 ...")
+    print(messages['INFO']['BUILD_NUMPY'].format(NUMPY_VERSION=NUMPY_VERSION))
     run_command(["conda", "run", "--no-capture-output" , "-n", env_name, "pip", "install", "--force-reinstall", "--no-binary", ":all:", f"numpy~={NUMPY_VERSION}"])
 
 def print_usage_instructions(env_name):
