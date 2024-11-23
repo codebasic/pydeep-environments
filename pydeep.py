@@ -262,9 +262,54 @@ def handle_framework_install(framework, args):
 
     print_usage_instructions(framework)
 
+def dynamic_usage(subparsers):
+    """
+    동적으로 사용법을 생성합니다.
+    Args:
+        subparsers (argparse._SubParsersAction): 서브 명령어 정보
+    Returns:
+        str: 동적으로 생성된 사용법
+    """
+    usage_lines = []
+    for command, parser in subparsers.choices.items():
+        # 중복된 usage: 제거
+        usage_line = f"  pydeep.py {command} {parser.format_usage().split('usage:')[1].strip()}"
+        usage_lines.append(usage_line)
+    return "\n".join(usage_lines)
+
+
+class KoreanHelpFormatter(argparse.HelpFormatter):
+    """argparse 기본 도움말 포맷을 한국어로 변경합니다."""
+    def add_usage(self, usage, actions, groups, prefix=None):
+        """'usage'를 '사용법'으로 변경."""
+        if prefix is None:
+            prefix = "사용법:\n"
+        super().add_usage(usage, actions, groups, prefix)
+
+    def start_section(self, heading):
+        """기본 헤딩을 한국어로 변경."""
+        translations = {
+            "positional arguments": "명령어",
+            "optional arguments": "옵션",
+        }
+        heading = translations.get(heading, heading)
+        super().start_section(heading)
+
+
 def main():
-    parser = argparse.ArgumentParser(description="딥러닝 환경 설정 스크립트")
+    parser = argparse.ArgumentParser(
+        description="딥러닝 환경 설정 스크립트", 
+        formatter_class=KoreanHelpFormatter, 
+        add_help=False)  # 기본 도움말 비활성화
     subparsers = parser.add_subparsers(dest="command")
+
+    # 사용자 정의 도움말 추가
+    parser.add_argument(
+        "-h", "--help",
+        action="help",
+        default=argparse.SUPPRESS,
+        help="도움말을 표시하고 종료합니다."
+    )
 
     # TensorFlow 명령어 추가
     tensorflow_parser = subparsers.add_parser("tensorflow", help="TensorFlow 환경 설정")
@@ -288,7 +333,10 @@ def main():
         choices=["tensorflow", "pytorch"],
         required=False,  # 'add'에서만 필요하므로 필수로 지정하지 않음
         help="Jupyter 커널로 등록할 환경 이름"
-)
+    )
+
+    # 동적 사용법 생성
+    parser.usage = dynamic_usage(subparsers)
 
     args = parser.parse_args()
 
