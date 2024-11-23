@@ -279,12 +279,22 @@ def handle_framework_install(framework, args):
     """TensorFlow 및 PyTorch 환경 설정 처리."""
     print(f"{framework.capitalize()} {args.version} 환경 설정 시작...")
 
+    # Windows에서 TensorFlow 경고 및 사용자 확인
+    system = platform.uname().system.lower().strip()
+    if framework == "tensorflow" and system == "windows":
+        print(messages['WARNING']['WINDOWS_TENSORFLOW'])
+        if confirm_proceed(messages['USER_PROMPT']['ABORT'], default="y"):
+            print(messages['INFO']['ABORT'])
+            sys.exit(1)
+
     # GPU 감지
     gpu = detect_gpu(*get_system_info(), args.cuda_override)
 
     # Conda 환경 확인
     if check_conda_environment(framework):
         print(messages['ERROR']['CONDA_ENV_EXISTS'])
+        print(messages['INFO']['REMOVE_ENV'].format(env_name=framework))
+        sys.exit(1)
         # NumPy 빌드 옵션이 있는 경우, NumPy만 설치 후 종료
         if args.build_numpy:
             build_numpy(framework)
@@ -296,7 +306,9 @@ def handle_framework_install(framework, args):
 
     # 프레임워크 설치
     if framework == "tensorflow":
-        install_tensorflow(framework, gpu, version=args.version, cuda_override=args.cuda_override)
+        gpu = None if system == "windows" else gpu
+        cuda_override = False if system == "windows" else args.cuda_override
+        install_tensorflow(framework, gpu, version=args.version, cuda_override=cuda_override)
     elif framework == "pytorch":
         install_pytorch(framework, gpu, version=args.version, cuda=args.cuda, cuda_override=args.cuda_override)
 
