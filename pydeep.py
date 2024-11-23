@@ -220,71 +220,94 @@ def confirm_proceed(user_prompt=messages['USER_PROMPT']['PROCEED'], default="y")
         user_input = default
     return valid_responses.get(user_input, False)
 
-def main():
-    parser = argparse.ArgumentParser(description="코드베이직 딥러닝 환경 설정", usage=messages['INFO']['USAGE'])
-    parser.add_argument("env_name", choices=["tensorflow", "pytorch"], help="생성할 환경 명칭")
+def add_jupyter_kernel(env_name):
+    """특정 Conda 환경을 Jupyter 커널로 등록."""
+    if check_conda_environment(env_name):
+        print(f"환경 {env_name}을(를) Jupyter 커널로 등록합니다.")
+        run_command(commands['CONDA_RUN'] + [
+            "-n", env_name,
+            "python", "-m", "ipykernel", "install", "--user",
+            "--name", env_name,
+            "--display-name", env_name.capitalize()
+        ])
+    else:
+        print(f"환경 {env_name}이(가) 존재하지 않습니다. 먼저 환경을 생성하세요.")
+        return 1
+    return 0
+
+def add_common_framework_arguments(parser):
+    """TensorFlow와 PyTorch에 공통적인 명령줄 옵션을 추가합니다."""
     parser.add_argument("--build-numpy", action="store_true", help="NumPy를 소스로부터 빌드")
-    parser.add_argument(
-        "--cuda-override", 
-        action="store_true", 
-        help="CUDA 감지 실패 시 강제로 CUDA 설치를 시도"
-    )
-    args = parser.parse_args()
+    parser.add_argument("--cuda-override", action="store_true", help="CUDA 감지 실패 시 강제로 CUDA 설치를 시도")
 
-    env_name = args.env_name
-    build_numpy_flag = args.build_numpy
-
-    # 시스템 및 아키텍처 정보 확인
-    system, machine = get_system_info()
-    print(f"{system} {machine}")
-
-    # 지원 여부 확인
-    if not is_supported_platform(system, machine):
-        print(messages['ERROR']['UNSUPPORTED_PLATFORM'])
-        sys.exit(1)
-    
-    # Windows에서 TensorFlow 설치 경고 및 진행 여부 확인
-    elif system == "windows" and env_name == "tensorflow":
-        print(messages['WARNING']['WINDOWS_TENSORFLOW'])
-        # 중단 여부 확인
-        if confirm_proceed(messages['USER_PROMPT']['ABORT'], default="y"):
-            print(messages['INFO']['ABORT'])
-            sys.exit(0)
+def handle_framework_install(framework, args):
+    """TensorFlow 및 PyTorch 환경 설정 처리."""
+    print(f"{framework.capitalize()} 환경 설정 시작...")
 
     # GPU 감지
-    gpu = detect_gpu(system, machine, args.cuda_override)
-    if gpu is None and not confirm_proceed(messages['USER_PROMPT']['ABORT'], default="y"):
-        print(messages['INFO']['ABORT'])
-        sys.exit(0)
+    gpu = detect_gpu(*get_system_info(), args.cuda_override)
 
-    # 기존 환경 확인. 이미 존재하는 경우 설치 중단
-    if check_conda_environment(env_name):
-        print(f"{messages['ERROR']['CONDA_ENV_EXISTS']} '{env_name}'")
-        print(messages['INFO']['ABORT'])
-        print(messages['INFO']['REMOVE_ENV'].format(env_name=env_name))
-        sys.exit(1)
-    
-    # 새로운 환경 생성
-    print(messages['INFO']['PROCEED_INSTALL'])
-    create_conda_environment(env_name, PYDATA_PACKAGES)
+    # Conda 환경 생성
+    create_conda_environment(framework, PYDATA_PACKAGES)
 
-    # Install frameworks
-    if env_name == "tensorflow":
-        print(f"TensorFlow {TENSORFLOW_VERSION} {messages['INFO']['PROCEED_INSTALL']}")
-        if system == "windows":
-            gpu = None
-        install_tensorflow(env_name, gpu)
+    # 프레임워크 설치
+    if framework == "tensorflow":
+        install_tensorflow(framework, gpu)
+    elif framework == "pytorch":
+        install_pytorch(framework, gpu)
 
-    elif env_name == "pytorch":
-        print(f"PyTorch {TORCH_VERSION} {messages['INFO']['PROCEED_INSTALL']}")
-        install_pytorch(env_name, gpu) 
+    # NumPy 소스 빌드
+    if args.build_numpy:
+        build_numpy(framework)
 
-    # Build NumPy if requested
-    if build_numpy_flag:
-        build_numpy(env_name)
+    print_usage_instructions(framework)
 
-    # Print usage instructions
-    print_usage_instructions(env_name)
+def main():
+    parser = argparse.ArgumentParser(description="딥러닝 환경 설정 스크립트")
+    subparsers = parser.add_subparsers(dest="command")
+
+    # TensorFlow 명령어 추가
+    tensorflow_parser = subparsers.add_parser("tensorflow", help="TensorFlow 환경 설정")
+    add_common_framework_arguments(tensorflow_parser)
+
+    # PyTorch 명령어 추가
+    pytorch_parser = subparsers.add_parser("pytorch", help="PyTorch 환경 설정")
+    add_common_framework_arguments(pytorch_parser)
+
+    # Jupyter 명령어 추가
+    jupyter_parser = subparsers.add_parser("jupyter", help="Jupyter 환경 관리")
+    jupyter_parser.add_argument(
+        "action", 
+        choices=["install", "add"], 
+        help="Jupyter 환경 설치(install) 또는 커널 등록(add)"
+    )
+
+    # 'add' 명령에만 필요한 옵션 추가
+    jupyter_parser.add_argument(
+        "--env",
+        choices=["tensorflow", "pytorch"],
+        required=False,  # 'add'에서만 필요하므로 필수로 지정하지 않음
+        help="Jupyter 커널로 등록할 환경 이름"
+)
+
+    args = parser.parse_args()
+
+    if args.command == "tensorflow":
+        handle_framework_install("tensorflow", args)
+    elif args.command == "pytorch":
+        handle_framework_install("pytorch", args)
+    elif args.command == "jupyter":
+        if args.action == "install":
+            print("Jupyter 환경 설치 중...")
+            create_conda_environment("jupyter", ["jupyterlab", "jupyterlab_widgets", "-c", "conda-forge"])
+            print_usage_instructions("jupyter")
+        elif args.action == "add":
+            if not args.env:
+                print("Error: '--env' 옵션으로 커널로 등록할 환경을 지정하세요 (예: --env tensorflow 또는 --env pytorch).")
+                sys.exit(1)
+            add_jupyter_kernel(args.env)
+    else:
+        parser.print_help()
 
 if __name__ == "__main__":
     print_banner()
