@@ -172,8 +172,9 @@ def install_tensorflow(env_name, gpu=None, **kwargs):
     # 추가 키워드 인자 처리
     version = kwargs.get("version", TENSORFLOW_VERSION)
     version = normalize_version(version, "pip")
+    CUDA_OVERRIDE = kwargs.get("cuda_override", False)
 
-    if gpu == 'cuda':
+    if gpu == 'cuda' or CUDA_OVERRIDE:
         package_name += "[and-cuda]"
     elif gpu is None:
         package_name += "-cpu"
@@ -189,12 +190,15 @@ def install_pytorch(env_name, gpu=None, **kwargs):
     # 추가 키워드 인자 처리
     version = kwargs.get("version", PYTORCH_VERSION)
     version = normalize_version(version, "conda")
+    cuda_version = kwargs.get("cuda", CUDA_VERSION)
+    cuda_version = normalize_version(cuda_version, "conda")
+    CUDA_OVERRIDE = kwargs.get("cuda_override", False)
 
     channels = ["pytorch"]
     packages = [f"pytorch={version}", "torchvision", "torchaudio"]
-    if gpu == 'cuda':
+    if gpu == 'cuda' or CUDA_OVERRIDE:
         channels.append("nvidia")
-        packages.append(f"pytorch-cuda={CUDA_VERSION}")
+        packages.append(f"pytorch-cuda={cuda_version}")
     elif gpu is None:
         packages.append("cpuonly")
     
@@ -262,7 +266,8 @@ def add_jupyter_kernel(env_name):
 def add_common_framework_arguments(parser, framework): 
     """TensorFlow와 PyTorch에 공통적인 명령줄 옵션을 추가합니다."""
     parser.add_argument("--build-numpy", action="store_true", help="NumPy를 소스로부터 빌드")
-    parser.add_argument("--cuda-override", action="store_true", help="CUDA 감지 실패 시 강제로 CUDA 설치를 시도")
+    if platform.uname().machine.lower() in ["x86_64", "amd64"]:
+        parser.add_argument("--cuda-override", action="store_true", help="CUDA 감지 실패 시 강제로 CUDA 설치를 시도")
     parser.add_argument(
         "--version",
         type=str,
@@ -291,9 +296,9 @@ def handle_framework_install(framework, args):
 
     # 프레임워크 설치
     if framework == "tensorflow":
-        install_tensorflow(framework, gpu, version=args.version)
+        install_tensorflow(framework, gpu, version=args.version, cuda_override=args.cuda_override)
     elif framework == "pytorch":
-        install_pytorch(framework, gpu, version=args.version)
+        install_pytorch(framework, gpu, version=args.version, cuda=args.cuda, cuda_override=args.cuda_override)
 
     # NumPy 소스 빌드
     if args.build_numpy:
@@ -357,6 +362,14 @@ def main():
     # PyTorch 명령어 추가
     pytorch_parser = subparsers.add_parser("pytorch", help="PyTorch 환경 설정")
     add_common_framework_arguments(pytorch_parser, 'pytorch')
+    # PyTorch 전용 옵션 추가
+    if platform.uname().machine.lower() in ["x86_64", "amd64"]:
+        pytorch_parser.add_argument(
+            "--cuda",
+            type=str,
+            default=CUDA_VERSION,  # 글로벌 변수에서 기본값 설정
+            help=f"PyTorch CUDA 버전 (기본값: {CUDA_VERSION}). PyTorch에만 적용됩니다. (x86 아키텍처에서만 사용 가능)"
+        )
 
     # Jupyter 명령어 추가
     jupyter_parser = subparsers.add_parser("jupyter", help="Jupyter 환경 관리")
