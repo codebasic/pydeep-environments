@@ -68,7 +68,7 @@ Windows에서는 Tensorflow CUDA 지원 GPU 가속이 어렵습니다.
     },
     "INFO": {
         "PROCEED_INSTALL": "설치를 진행합니다.",
-        "CONDA_ENV_CREATED": "Conda 환경 생성 중...",
+        "CREATE_CONDA_ENV": "Conda 환경 생성 중...",
         "ABORT": "작업이 중단되었습니다.",
         "REMOVE_ENV": "환경을 제거하려면 다음 명령어를 실행하세요: conda remove --name {env_name} --all",
         "USAGE": """
@@ -247,8 +247,17 @@ def handle_framework_install(framework, args):
     # GPU 감지
     gpu = detect_gpu(*get_system_info(), args.cuda_override)
 
-    # Conda 환경 생성
-    create_conda_environment(framework, PYDATA_PACKAGES)
+    # Conda 환경 확인
+    if check_conda_environment(framework):
+        print(messages['ERROR']['CONDA_ENV_EXISTS'])
+        # NumPy 빌드 옵션이 있는 경우, NumPy만 설치 후 종료
+        if args.build_numpy:
+            build_numpy(framework)
+            return
+    else:
+        # Conda 환경 생성
+        print(messages['INFO']['CREATE_CONDA_ENV'])
+        create_conda_environment(framework, PYDATA_PACKAGES)
 
     # 프레임워크 설치
     if framework == "tensorflow":
