@@ -20,10 +20,10 @@ def print_banner():
 
 # Global variables
 PYTHON_VERSION = os.getenv("PYTHON_VERSION", "3.10")
-NUMPY_VERSION = os.getenv("NUMPY_VERSION", "1.26.0")
-TENSORFLOW_VERSION = os.getenv("TENSORFLOW_VERSION", "2.17.0")
-TORCH_VERSION = os.getenv("TORCH_VERSION", "2.5.0")
-KERAS_VERSION = os.getenv("KERAS_VERSION", "3.6.0")
+NUMPY_VERSION = os.getenv("NUMPY_VERSION", "1.26")
+TENSORFLOW_VERSION = os.getenv("TENSORFLOW_VERSION", "2.17")
+PYTORCH_VERSION = os.getenv("TORCH_VERSION", "2.5")
+KERAS_VERSION = os.getenv("KERAS_VERSION", "3.6")
 CUDA_VERSION = os.getenv("CUDA_VERSION", "11.8")
 
 PYDATA_PACKAGES = [
@@ -140,25 +140,58 @@ def check_conda_environment(env_name):
     output = run_command(["conda", "info", "--envs"], capture_output=True)
     return any(env_name in line.split() for line in output.splitlines())
 
-def install_tensorflow(env_name, gpu=None):
+def normalize_version(version, style="pip"):
+    """
+    버전을 정규화하여 pip 또는 conda 스타일로 반환.
+    Args:
+        version (str): 사용자 입력 버전 (예: "2.17", "1.10.0", "~=2.17.1").
+        style (str): "pip" 또는 "conda" 중 하나를 선택 (기본값: "pip").
+    Returns:
+        str: 정규화된 버전 (pip 스타일: "~=2.17.0", conda 스타일: "2.17").
+    """
+    parsed_version = Version(version)
+
+    # 사용자가 정확한 패치 버전을 지정한 경우 그대로 반환
+    if parsed_version.micro != 0:
+        return version  # 사용자가 지정한 버전 존중
+
+    # 메이저 및 마이너만 주어진 경우
+    if style == "pip":
+        return f"{parsed_version.major}.{parsed_version.minor}.0"  # pip 스타일: ~=x.y.0
+    elif style == "conda":
+        return f"{parsed_version.major}.{parsed_version.minor}"  # conda 스타일: x.y
+
+    # 기본적으로 사용자 입력 그대로 반환
+    return version
+
+def install_tensorflow(env_name, gpu=None, **kwargs):
     """TensorFlow 및 관련 패키지 설치."""
     # 시스템 및 아키텍처 조건 확인
     package_name = "tensorflow"
+
+    # 추가 키워드 인자 처리
+    version = kwargs.get("version", TENSORFLOW_VERSION)
+    version = normalize_version(version, "pip")
+
     if gpu == 'cuda':
         package_name += "[and-cuda]"
     elif gpu is None:
         package_name += "-cpu"
         
-    run_command(commands['CONDA_RUN'] + ["-n", env_name, "--no-capture-output", "pip", "install", f"{package_name}~={TENSORFLOW_VERSION}"])
+    run_command(commands['CONDA_RUN'] + ["-n", env_name, "--no-capture-output", "pip", "install", f"{package_name}~={version}"])
 
     if gpu == 'metal':
         print("Apple Silicon Metal 가속 사용을 위한 Tensorflow-Metal 설치")
         run_command(commands['CONDA_RUN'] + ["-n", env_name,  "pip", "install", "tensorflow-metal"])
   
-def install_pytorch(env_name, gpu=None):
+def install_pytorch(env_name, gpu=None, **kwargs):
     """PyTorch 및 관련 패키지 설치."""
+    # 추가 키워드 인자 처리
+    version = kwargs.get("version", PYTORCH_VERSION)
+    version = normalize_version(version, "conda")
+
     channels = ["pytorch"]
-    packages = ["pytorch", "torchvision", "torchaudio"]
+    packages = [f"pytorch={version}", "torchvision", "torchaudio"]
     if gpu == 'cuda':
         channels.append("nvidia")
         packages.append(f"pytorch-cuda={CUDA_VERSION}")
@@ -169,12 +202,12 @@ def install_pytorch(env_name, gpu=None):
 
     # Keras 설치
     run_command(commands['CONDA_RUN'] + ["-n", env_name,
-        "pip", "install", f"keras~={KERAS_VERSION}"
+        "pip", "install", f"keras~={normalize_version(KERAS_VERSION)}"
     ])
 
 def build_numpy(env_name):
     """Build and install NumPy from source."""
-    print(messages['INFO']['BUILD_NUMPY'].format(NUMPY_VERSION=NUMPY_VERSION))
+    print(messages['INFO']['BUILD_NUMPY'].format(NUMPY_VERSION=normalize_version(NUMPY_VERSION)))
     run_command(["conda", "run", "--no-capture-output" , "-n", env_name, "pip", "install", "--force-reinstall", "--no-binary", ":all:", f"numpy~={NUMPY_VERSION}"])
 
 def print_usage_instructions(env_name):
@@ -226,14 +259,20 @@ def add_jupyter_kernel(env_name):
         return 1
     return 0
 
-def add_common_framework_arguments(parser):
+def add_common_framework_arguments(parser, framework): 
     """TensorFlow와 PyTorch에 공통적인 명령줄 옵션을 추가합니다."""
     parser.add_argument("--build-numpy", action="store_true", help="NumPy를 소스로부터 빌드")
     parser.add_argument("--cuda-override", action="store_true", help="CUDA 감지 실패 시 강제로 CUDA 설치를 시도")
+    parser.add_argument(
+        "--version",
+        type=str,
+        default={'tensorflow': TENSORFLOW_VERSION, 'pytorch': PYTORCH_VERSION}[framework],
+        help=f"설치할 {framework.capitalize()} 버전 (환경 변수: {framework.upper()}_VERSION)"
+    )
 
 def handle_framework_install(framework, args):
     """TensorFlow 및 PyTorch 환경 설정 처리."""
-    print(f"{framework.capitalize()} 환경 설정 시작...")
+    print(f"{framework.capitalize()} {args.version} 환경 설정 시작...")
 
     # GPU 감지
     gpu = detect_gpu(*get_system_info(), args.cuda_override)
@@ -252,9 +291,9 @@ def handle_framework_install(framework, args):
 
     # 프레임워크 설치
     if framework == "tensorflow":
-        install_tensorflow(framework, gpu)
+        install_tensorflow(framework, gpu, version=args.version)
     elif framework == "pytorch":
-        install_pytorch(framework, gpu)
+        install_pytorch(framework, gpu, version=args.version)
 
     # NumPy 소스 빌드
     if args.build_numpy:
@@ -313,11 +352,11 @@ def main():
 
     # TensorFlow 명령어 추가
     tensorflow_parser = subparsers.add_parser("tensorflow", help="TensorFlow 환경 설정")
-    add_common_framework_arguments(tensorflow_parser)
+    add_common_framework_arguments(tensorflow_parser, 'tensorflow')
 
     # PyTorch 명령어 추가
     pytorch_parser = subparsers.add_parser("pytorch", help="PyTorch 환경 설정")
-    add_common_framework_arguments(pytorch_parser)
+    add_common_framework_arguments(pytorch_parser, 'pytorch')
 
     # Jupyter 명령어 추가
     jupyter_parser = subparsers.add_parser("jupyter", help="Jupyter 환경 관리")
