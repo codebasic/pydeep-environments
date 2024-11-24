@@ -78,7 +78,6 @@ Conda 환경 관리를 위해 Miniconda 설치 파일을 다운로드하고 설�
 
 ### 2. 설치 스크립트 실행
 
-[pydeep.py](pydeep.py) 설치 스크립트는 딥러닝 환경(TensorFlow 또는 PyTorch)을 자동으로 설정하는 도구입니다.
 아래 절차를 따라 진행하세요.
 
 #### 실행 환경 준비
@@ -88,16 +87,14 @@ Conda 환경 관리를 위해 Miniconda 설치 파일을 다운로드하고 설�
 
 #### 설치 절차
 
-1. [pydeep.py](pydeep.py) 설치 스크립트를 다운로드합니다.
-   * 기본적으로 다운로드된 파일은 사용자의 "다운로드" 폴더에 저장됩니다.
-2. 명령줄 인터페이스에서 다운로드된 파일이 있는 디렉터리로 이동합니다:
+[codebasic (PyPI)](https://pypi.org/project/codebasic/) 모듈 설치
 
 ```sh
-cd ~/Downloads
+pip install codebasic
 ```
 
 다음 명령을 실행하여 설치 스크립트의 안내를 참조하여 진행합니다.
 
 ```sh
-python pydeep.py --help
+python -m codebasic --help
 ```
