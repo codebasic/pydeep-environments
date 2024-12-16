@@ -13,7 +13,7 @@ Codebasic (c) 2015-2024
 
 윈도우와 리눅스 경우, 직접 설치보다는 환경 구성이 완료된 [도커 사용](#docker)을 권장합니다.
 
-맥은 [직접 설치](#mac)를 권장합니다.
+맥은 직접 설치를 권장합니다.
 
 ## [Docker](https://docs.docker.com/get-started/overview/)
 
@@ -49,6 +49,12 @@ sudo bash ubuntu_setup.sh
 #### GPU 가속 활용
 
 지원하는 NVIDIA 그래픽 카드 장치가 장착되어 있는 경우. 장치의 [드라이버](https://www.nvidia.co.kr/drivers) 설치 및 갱신이 필요할 수 있습니다.
+
+##### Windows WSL2 NVIDIA GPU 가속 확인
+
+[GPU support in Docker Desktop](https://docs.docker.com/desktop/features/gpu)
+
+##### 코드베이직 도커 컨테이너 실행
 
 ```powershell
 docker run --name pydeep-gpu -p 8888:8888 --gpus all -it codebasic/pydeep
