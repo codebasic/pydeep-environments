@@ -1,6 +1,6 @@
 # 딥러닝 환경 설정
 
-Codebasic (c) 2015-2024
+Codebasic (c) 2015-2025
 
 다음 문서는 아래 플랫폼별 딥러닝 소프트웨어 라이브러리 설치 절차를 안내합니다.
 
@@ -32,6 +32,12 @@ Docker Desktop은 도커 환경 관리를 위한 GUI 인터페이스 소프트�
 * Windows 10 이상 64비트 (x86-64)
 * [WSL 설치](https://learn.microsoft.com/ko-kr/windows/wsl/install#install-wsl-command)
 
+#### GPU 가속 활용
+
+지원하는 NVIDIA 그래픽 카드 장치가 장착되어 있는 경우. 장치의 [드라이버](https://www.nvidia.co.kr/drivers) 설치 및 갱신이 필요할 수 있습니다.
+
+[NVIDIA GPU 가속 확인 (GPU support in Docker Desktop for Windows)](https://docs.docker.com/desktop/features/gpu)
+
 ### Linux (Ubuntu)
 
 [ubuntu_setup.sh](https://github.com/codebasic/pydeep-environments/blob/main/ubuntu_setup.sh) 파일을 참조하여 다음과 같이 도커 환경을 설정합니다.
@@ -46,17 +52,9 @@ sudo bash ubuntu_setup.sh
 
 다음 중 실행 환경에 따라 *하나를 선택*하여 실행합니다.
 
-#### GPU 가속 활용
+#### GPU 기반
 
-지원하는 NVIDIA 그래픽 카드 장치가 장착되어 있는 경우. 장치의 [드라이버](https://www.nvidia.co.kr/drivers) 설치 및 갱신이 필요할 수 있습니다.
-
-##### Windows WSL2 NVIDIA GPU 가속 확인
-
-[GPU support in Docker Desktop](https://docs.docker.com/desktop/features/gpu)
-
-##### 코드베이직 도커 컨테이너 실행
-
-```powershell
+```sh
 docker run --name pydeep-gpu -p 8888:8888 --gpus all -it codebasic/pydeep
 ```
 
@@ -64,43 +62,6 @@ docker run --name pydeep-gpu -p 8888:8888 --gpus all -it codebasic/pydeep
 
 딥러닝 소프트웨어의 GPU 가속을 활용하지 않거나, 활용할 수 없는 경우
 
-```powershell
+```sh
 docker run --name pydeep -p 8888:8888 -it codebasic/pydeep
-```
-
-## 직접 설치 (Native)
-
-### 1. Miniconda 설치
-
-Conda 환경 관리를 위해 Miniconda 설치 파일을 다운로드하고 설치합니다. Miniconda는 Python 환경을 손쉽게 관리할 수 있는 무료 소프트웨어입니다.
-
-#### Miniconda Window
-
-[Miniconda Windows Installer](https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe) 다운로드 및 실행 (설치 마법사)
-
-#### Miniconda Mac/Linux
-
-[Miniconda 빠른 명령줄 설치](https://docs.anaconda.com/miniconda/install/#quick-command-line-install) 문서에서 절차와 명령을 참조하여 실행합니다.
-
-### 2. 설치 스크립트 실행
-
-아래 절차를 따라 진행하세요.
-
-#### 실행 환경 준비
-
-* **Windows**: Anaconda Powershell Prompt 실행
-* **Mac/Linux**: 터미널 실행
-
-#### 설치 절차
-
-[codebasic (PyPI)](https://pypi.org/project/codebasic/) 모듈 설치
-
-```sh
-pip install codebasic
-```
-
-다음 명령을 실행하여 설치 스크립트의 안내를 참조하여 진행합니다.
-
-```sh
-python -m codebasic --help
 ```
