@@ -65,3 +65,23 @@ docker run --name pydeep-gpu -p 8888:8888 --gpus all -it codebasic/pydeep
 ```sh
 docker run --name pydeep -p 8888:8888 -it codebasic/pydeep
 ```
+
+## 직접 설치
+
+### Miniconda 설치
+
+아래 문서에서 각 운영체제별 설치 절차 참조.
+
+[Miniconda 설치 문서](https://www.anaconda.com/docs/getting-started/miniconda/install)
+
+### 공통 패키지 설치
+
+```sh
+conda create --name pydeep python=3.10
+conda run --name pydeep install scikit-learn pandas matplotlib ipykernel
+```
+
+PyTorch 또는 Tensorflow의 설치 절차에 따라 콘다 환경에 설치
+
+* [PyTorch](https://pytorch.org/get-started/locally/)
+* [Tensorflow](https://www.tensorflow.org/install?hl=ko)
