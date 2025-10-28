@@ -78,7 +78,7 @@ docker run --name pydeep -p 8888:8888 -it codebasic/pydeep
 
 ```sh
 conda create --name pydeep python=3.10
-conda run --name pydeep install scikit-learn pandas matplotlib ipykernel
+conda install --name pydeep scikit-learn pandas matplotlib ipykernel
 ```
 
 PyTorch 또는 Tensorflow의 설치 절차에 따라 콘다 환경에 설치
