@@ -55,7 +55,7 @@ sudo bash ubuntu_setup.sh
 #### GPU 기반
 
 ```sh
-docker run --name pydeep-gpu -p 8888:8888 --gpus all -it codebasic/pydeep
+docker run --name pydeep -p 8888:8888 --gpus=all -it codebasic/pydeep
 ```
 
 #### CPU 기반
