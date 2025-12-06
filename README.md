@@ -50,21 +50,20 @@ sudo bash ubuntu_setup.sh
 
 최초 실행 시, 도커 이미지([codebasic/pydeep](https://hub.docker.com/r/codebasic/pydeep)) 다운로드가 실행됩니다.
 
-다음 중 실행 환경에 따라 *하나를 선택*하여 실행합니다.
-
-#### GPU 기반
-
 ```sh
-docker run --name pydeep -p 8888:8888 --gpus=all -it codebasic/pydeep
+docker run --name pydeep --gpus=all --ipc=host -p 8888:8888 -it codebasic/pydeep
 ```
 
-#### CPU 기반
+주요 설정
 
-딥러닝 소프트웨어의 GPU 가속을 활용하지 않거나, 활용할 수 없는 경우
+* [GPU 접근](https://docs.docker.com/engine/containers/resource_constraints/#gpu)
+* [호스트 공유 메모리 활용](https://docs.docker.com/reference/cli/docker/container/run/#ipc)
 
-```sh
-docker run --name pydeep -p 8888:8888 -it codebasic/pydeep
-```
+    도커 컨테이너를 사용하는 경우, 공유 메모리 (shm; shared memory) 크기의 기본값(64MB)이 작아서 멀티 프로세스가 실패할 수 있습니다. 호스트 공유 메모리 사용 설정을 권장합니다. ([도커 컨테이너 자원 제한](https://docs.docker.com/engine/containers/run/#runtime-constraints-on-resources))
+* [포트 연결](https://docs.docker.com/engine/network/port-publishing/)
+
+    주피터 서버 접근을 위해 호스트 포트를 컨테이너 내부 포트에 연결합니다.
+
 
 ## 직접 설치
 
