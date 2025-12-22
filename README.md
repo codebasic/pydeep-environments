@@ -51,7 +51,7 @@ sudo bash ubuntu_setup.sh
 최초 실행 시, 도커 이미지([codebasic/pydeep](https://hub.docker.com/r/codebasic/pydeep)) 다운로드가 실행됩니다.
 
 ```sh
-docker run --name pydeep --gpus=all --shm-size=2g -p 8888:8888 -it codebasic/pydeep
+docker run --name pydeep --gpus=all --shm-size=2g -p 8888:8888 -d codebasic/pydeep
 ```
 
 주요 설정
@@ -68,24 +68,38 @@ docker run --name pydeep --gpus=all --shm-size=2g -p 8888:8888 -it codebasic/pyd
 
     주피터 서버 접근을 위해 호스트 포트를 컨테이너 내부 포트에 연결합니다.
 
-#### 데이터/노트북 볼륨 마운트 예시
+#### 활용 예시
 
-호스트 디렉터리를 컨테이너에 마운트해 노트북/데이터를 영속화합니다.
+호스트 디렉터리를 컨테이너에 [바인드 마운트(bind mount)](https://docs.docker.com/engine/storage/bind-mounts/)하여 실행합니다.
 
-```sh
-docker run --name pydeep \
-    --gpus=all --shm-size=2g \
-    -p 8888:8888 \
-    -v "$PWD/notebooks":/workspace/notebooks \
-    -v "$PWD/data":/workspace/data \
-    -it codebasic/pydeep
+POSIX Shell (bash/zsh 등)
+
+```bash
+docker run --name pydeep --gpus=all --shm-size=2g -p 8888:8888 \
+    -v "$(pwd)/pydeep":/workspace/pydeep \
+    -d codebasic/pydeep
 ```
 
-참고: macOS에서는 Docker 컨테이너 내 NVIDIA GPU 가속을 사용할 수 없습니다. Mac은 호스트 직접 설치로 MPS/Metal 가속을 활용하는 것을 권장합니다.
+Powershell
+
+파워쉘은 기존 쉘과 문법 차이가 있습니다.
+
+* 명령줄에서 탈출문자가 백틱(`)으로, 유닉스 계열의 역슬래시(```\```)와 구분됩니다.
+* 윈도우 경로 구분자는 역슬래시(`\`)로 유닉스 계열의 경로 구분자인 슬래시(`/`)와 차이가 있습니다.  
+  바인드 마운트 시, 윈도우 호스트 경로에서 사용하는 경로 구분자와 리눅스 컨테이너 경로 작성 시 유의해야 합니다.  
+* 현재 경로값 획득 시, 경로 치환 방식이 다릅니다: POSIX Shell은 `$(pwd)`처럼 명령 치환을 쓰고, PowerShell은 현재 경로값을 담은 변수 `${pwd}` 를 사용합니다.
+
+```powershell
+docker run --name pydeep --gpus=all --shm-size=2g -p 8888:8888 `
+    -v "${pwd}\pydeep":/workspace/pydeep `
+    -d codebasic/pydeep
+```
 
 #### 컨테이너에서 GPU 확인 (Linux/WSL)
 
 컨테이너 내부 쉘에서 다음 명령으로 GPU 인식 여부를 확인합니다.
+
+참고: macOS에서는 Docker 컨테이너 내 NVIDIA GPU 가속을 사용할 수 없습니다. Mac은 호스트 직접 설치로 MPS/Metal 가속을 활용하는 것을 권장합니다.
 
 ```sh
 nvidia-smi
@@ -123,20 +137,6 @@ conda create --name pytorch --clone pyml
 conda run -n pytorch python -m ipykernel install --user --name pytorch --display-name "PyTorch 2"
 ```
 
-GPU 가속 검증
-
-Linux/Windows (CUDA)
-
-```sh
-conda run -n pytorch python -c "import torch; print(f'PyTorch: {torch.__version__}'); print(f'CUDA available: {torch.cuda.is_available()}')"
-```
-
-macOS (MPS)
-
-```sh
-conda run -n pytorch python -c "import torch; print(f'PyTorch: {torch.__version__}'); print(f'MPS available: {torch.backends.mps.is_available()}')"
-```
-
 #### TensorFlow 환경
 
 * 설치 안내: [Tensorflow](https://www.tensorflow.org/install?hl=ko) 공식 문서를 참조해 OS/하드웨어에 맞게 설치합니다.
@@ -150,18 +150,4 @@ conda create --name tensorflow --clone pyml
 
 ```sh
 conda run -n tensorflow python -m ipykernel install --user --name tensorflow --display-name "Tensorflow 2"
-```
-
-GPU 가속 검증
-
-Linux/Windows (CUDA)
-
-```sh
-conda run -n tensorflow python -c "import tensorflow as tf; print(f'TensorFlow: {tf.__version__}'); print(f'GPUs: {len(tf.config.list_physical_devices('GPU'))}')"
-```
-
-macOS (Metal)
-
-```sh
-conda run -n tensorflow python -c "import tensorflow as tf; print(f'TensorFlow: {tf.__version__}'); print(f'GPUs: {len(tf.config.list_physical_devices('GPU'))}')"
 ```
