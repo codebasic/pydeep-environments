@@ -19,11 +19,11 @@ Codebasic (c) 2015-2025
 
 Docker는 가상화를 위한 오픈 소스 소프트웨어입니다.
 
-Docker Desktop은 도커 환경 관리를 위한 GUI 인터페이스 소프트웨어입니다. 무료로 설치가 가능하지만 상용 라이선스 소프트웨어입니다. 개인 및 중소 규모 조직은 무료로 사용할 수 있습니다.
+### Windows
 
-정부 기관 및 대기업 환경에서 Docker Desktop 활용 시 라이선스를 검토하시기 바랍니다. 상용 라이선스 소프트웨어 설치와 활용에 대한 우려가 있는 경우, 1) 리눅스에서 도커를 설정하거나, 2) 직접 설치 절차를 진행하기 바랍니다.
+윈도우에서는 도커 엔진과 관리 프로그램을 한번에 설치하는 [Docker Desktop](https://docs.docker.com/desktop/) 활용을 권장합니다. Docker Desktop은 도커 환경 관리를 위한 GUI 인터페이스 소프트웨어입니다. 개인/중소 규모 조직은 무료로 사용할 수 있습니다.
 
-### Docker Desktop for Windows
+[도커 엔진](https://docs.docker.com/engine/)은 무료/오픈 소스이지만, GUI 기반 관리 편의를 제공하는 Docker Desktop은 상용 라이선스 소프트웨어입니다. 정부 기관 및 대기업 환경에서 Docker Desktop 활용 시 라이선스를 검토하시기 바랍니다. 상용 라이선스 소프트웨어 설치와 활용에 대한 우려가 있는 경우, 도커 엔진만 설치하거나, 오픈 소스 기반 도커 관리 도구를 활용할 수 있습니다.
 
 [Docker Desktop for Windows 설치](https://docs.docker.com/desktop/install/windows-install)
 
@@ -38,13 +38,11 @@ Docker Desktop은 도커 환경 관리를 위한 GUI 인터페이스 소프트�
 
 [NVIDIA GPU 가속 확인 (GPU support in Docker Desktop for Windows)](https://docs.docker.com/desktop/features/gpu)
 
-### Linux (Ubuntu)
+### Linux
 
-[ubuntu_setup.sh](https://github.com/codebasic/pydeep-environments/blob/main/ubuntu_setup.sh) 파일을 참조하여 다음과 같이 도커 환경을 설정합니다.
+리눅스는 각 배포판별 도커 설치 절차를 참조하시기 바랍니다.
 
-```sh
-sudo bash ubuntu_setup.sh
-```
+[Docker Engine 설치 안내 (Install Docker Engine)](https://docs.docker.com/engine/install/)
 
 ### 도커 컨테이너 실행
 
@@ -64,7 +62,6 @@ docker run --name pydeep --gpus=all --shm-size=2g -p 8888:8888 -d codebasic/pyde
     다음 중 하나의 설정을 권장합니다.  
     1. 공유 메모리 크기 설정 (`shm-size`)
     2. [호스트 공유 메모리 활용](https://docs.docker.com/reference/cli/docker/container/run/#ipc)
-
 
 #### 활용 예시
 
@@ -93,7 +90,7 @@ docker run --name pydeep --gpus=all --shm-size=2g -p 8888:8888 `
     -d codebasic/pydeep
 ```
 
-#### 컨테이너에서 GPU 확인 (Linux/WSL)
+#### GPU 확인
 
 컨테이너 내부 쉘에서 다음 명령으로 GPU 인식 여부를 확인합니다.
 
@@ -103,11 +100,35 @@ docker run --name pydeep --gpus=all --shm-size=2g -p 8888:8888 `
 nvidia-smi
 ```
 
+#### 주피터 서버
+
+컨테이너에서 주피터(jupyter) 서버가 실행 중인 경우, 호스트 웹브라우저에서 다음 주소로 접속합니다.
+
+`http://localhost:8888`
+
+토큰 값이 필요한 경우, 도커 컨테이너 쉘에서 다음 명령으로 토큰 값을 확인합니다.
+
+```sh
+docker exec pydeep jupyter server list
+```
+
+컨테이너 내부의 URL은 호스트의 `localhost`로 접속해야 합니다. 다음 명령으로 호스트 주소로 치환할 수 있습니다.
+
+* 파워쉘(Windows PowerShell)
+
+```powershell
+docker exec pydeep jupyter server list | ForEach-Object { $_ -replace 'http://[^:]+', 'http://localhost' }
+```
+
+* POSIX 쉘 (bash/zsh 등)
+  
+```sh
+docker exec pydeep jupyter server list | sed -E 's#http://[^:]+#http://localhost#'
+```
+
 ## 직접 설치
 
-### Miniconda 설치
-
-아래 문서에서 각 운영체제별 설치 절차 참조.
+### Miniforge 설치
 
 [conda 설치 (miniforge)](https://conda-forge.org/download/)
 
@@ -115,12 +136,12 @@ nvidia-smi
 
 ```sh
 conda create --name pyml python=3.10
-conda install --name pyml scikit-learn pandas matplotlib ipykernel
+conda install --name pyml scikit-learn pandas matplotlib ipykernel ipywidgets
 ```
 
-### 프레임워크별 직접 설치
+### 딥러닝 프레임워크
 
-#### PyTorch 환경
+#### PyTorch
 
 * 설치 안내: [PyTorch](https://pytorch.org/get-started/locally/) 공식 문서를 참조해 OS/하드웨어에 맞게 설치합니다.
 * 환경 생성: 공통 환경(`pyml`)을 복제해 PyTorch 전용 환경을 만듭니다.
@@ -129,23 +150,39 @@ conda install --name pyml scikit-learn pandas matplotlib ipykernel
 conda create --name pytorch --clone pyml
 ```
 
-커널 등록: 주피터에서 선택할 수 있도록 커널을 등록합니다.
+#### TensorFlow
 
-```sh
-conda run -n pytorch python -m ipykernel install --user --name pytorch --display-name "PyTorch 2"
-```
-
-#### TensorFlow 환경
-
-* 설치 안내: [Tensorflow](https://www.tensorflow.org/install?hl=ko) 공식 문서를 참조해 OS/하드웨어에 맞게 설치합니다.
+* 설치 안내: [Tensorflow](https://www.tensorflow.org/install) 공식 문서를 참조해 OS/하드웨어에 맞게 설치합니다.
 * 환경 생성: 공통 환경(`pyml`)을 복제해 TensorFlow 전용 환경을 만듭니다.
 
 ```sh
 conda create --name tensorflow --clone pyml
 ```
 
-커널 등록: 주피터에서 선택할 수 있도록 커널을 등록합니다.
+### [선택적] Jupyter
+
+코드 작성 환경 (IDE) Jupyter Lab 설치.
+
+명령줄 도구는 [Astral uv](https://docs.astral.sh/uv/)로 설치를 권장합니다.
 
 ```sh
-conda run -n tensorflow python -m ipykernel install --user --name tensorflow --display-name "Tensorflow 2"
+# Astral UV를 통해 최신 버전의 Jupyter Lab을 실행합니다.
+uvx --from jupyterlab jupyter-lab
+```
+
+주피터 실행
+
+```sh
+jupyter-lab
+```
+
+#### 주피터 커널
+
+주피터에서 파이썬 환경을 사용하려면 각 환경을 주피터 커널(kernel)로 등록해야 합니다. 각 환경을 활성화 후, 다음 명령을 실행합니다.
+
+예: PyTorch 환경 등록
+
+```sh
+conda activate pytorch
+python -m ipykernel install --user --name pytorch --display-name "Pytorch 2"
 ```
