@@ -57,16 +57,14 @@ docker run --name pydeep --gpus=all --shm-size=2g -p 8888:8888 -d codebasic/pyde
 주요 설정
 
 * [GPU 접근](https://docs.docker.com/engine/containers/resource_constraints/#gpu)
-* 공유 메모리
-    도커 컨테이너를 사용하는 경우, 공유 메모리 (shm; shared memory) 크기의 기본값(64MB)이 작아서 멀티 프로세스가 실패할 수 있습니다.
-    다음 중 하나의 설정을 권장합니다.
-    ([도커 컨테이너 자원 제한](https://docs.docker.com/engine/containers/run/#runtime-constraints-on-resources))
+* [포트 연결](https://docs.docker.com/engine/network/port-publishing/)  
+    주피터 서버 접근을 위해 호스트 포트를 컨테이너 내부 포트에 연결합니다.
+* 공유 메모리  
+    도커 컨테이너 공유 메모리 (shared memory) 크기 기본값(64MB)이 작아서 멀티 프로세스가 실패할 수 있습니다. ([도커 컨테이너 자원 제한](https://docs.docker.com/engine/containers/run/#runtime-constraints-on-resources))  
+    다음 중 하나의 설정을 권장합니다.  
     1. 공유 메모리 크기 설정 (`shm-size`)
     2. [호스트 공유 메모리 활용](https://docs.docker.com/reference/cli/docker/container/run/#ipc)
 
-* [포트 연결](https://docs.docker.com/engine/network/port-publishing/)
-
-    주피터 서버 접근을 위해 호스트 포트를 컨테이너 내부 포트에 연결합니다.
 
 #### 활용 예시
 
