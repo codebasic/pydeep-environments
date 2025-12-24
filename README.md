@@ -150,6 +150,30 @@ conda install --name pyml scikit-learn pandas matplotlib ipykernel ipywidgets
 conda create --name pytorch --clone pyml
 ```
 
+##### GPU 가속 확인
+
+PyTorch가 정상 설치되고 GPU 가속에 접근 가능한지 확인합니다. 환경을 활성화한 후 다음 명령을 실행합니다.
+
+###### CUDA (Linux/Windows)
+
+```sh
+conda activate pytorch
+python -c "import torch; print('PyTorch Version:', torch.__version__); assert torch.cuda.is_available(), 'CUDA not available'; print('CUDA Device:', torch.cuda.get_device_name(0))"
+```
+
+명령이 실행되면 PyTorch 버전을 먼저 출력하고, CUDA를 확인합니다. CUDA가 없으면 `AssertionError`가 발생합니다.
+
+###### MPS (Mac)
+
+Mac에서는 Metal Performance Shaders(MPS)를 사용합니다.
+
+```sh
+conda activate pytorch
+python -c "import torch; print('PyTorch Version:', torch.__version__); assert torch.backends.mps.is_available(), 'MPS not available'; print('MPS Device:', 'Apple Metal Performance Shaders')"
+```
+
+MPS가 사용 가능하면 명령이 실행되고, 그렇지 않으면 `AssertionError`가 발생합니다.
+
 #### TensorFlow
 
 * 설치 안내: [Tensorflow](https://www.tensorflow.org/install) 공식 문서를 참조해 OS/하드웨어에 맞게 설치합니다.
