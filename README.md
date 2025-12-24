@@ -15,9 +15,9 @@ Codebasic (c) 2015-2025
 
 맥은 직접 설치를 권장합니다.
 
-## [Docker](https://docs.docker.com/get-started/overview/)
+## Docker
 
-Docker는 가상화를 위한 오픈 소스 소프트웨어입니다.
+[도커(Docker)](https://docs.docker.com/get-started/overview/)는 가상화를 위한 오픈 소스 소프트웨어입니다.
 
 ### Windows
 
@@ -93,8 +93,6 @@ docker run --name pydeep --gpus=all --shm-size=2g -p 8888:8888 `
 #### GPU 확인
 
 컨테이너 내부 쉘에서 다음 명령으로 GPU 인식 여부를 확인합니다.
-
-참고: macOS에서는 Docker 컨테이너 내 NVIDIA GPU 가속을 사용할 수 없습니다. Mac은 호스트 직접 설치로 MPS/Metal 가속을 활용하는 것을 권장합니다.
 
 ```sh
 nvidia-smi
