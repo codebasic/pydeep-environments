@@ -1,0 +1,13 @@
+services:
+  pydeep:
+    image: codebasic/pydeep:latest
+    container_name: pydeep
+    gpus: all
+    shm_size: 4g
+    ports:
+      - "8888:8888"  # Map host port 8888 to container port 8888 (e.g., Jupyter Notebook)
+      - "6006:6006"  # Map host port 6006 to container port 6006 (TensorBoard)
+    volumes:
+      - type: bind
+        source: matplotlibrc.linux
+        target: /workspace/matplotlibrc
