@@ -29,8 +29,14 @@ Codebasic (c) 2015-2025
 
 #### 요구사항
 
-* Windows 10 이상 64비트 (x86-64)
+* Windows 10 64비트 22H2, Windows 11 64비트 23H2 이상 (x86-64)
 * [WSL 설치](https://learn.microsoft.com/ko-kr/windows/wsl/install#install-wsl-command)
+
+    ```powershell
+    wsl --update
+    ```
+
+<!-- ![WSL 업데이트 화면](wsl-update.png) -->
 
 #### GPU 가속 활용
 
@@ -70,24 +76,19 @@ docker run --name pydeep --gpus=all --shm-size=2g -p 8888:8888 -d codebasic/pyde
 POSIX Shell (bash/zsh 등)
 
 ```bash
-docker run --name pydeep --gpus=all --shm-size=2g -p 8888:8888 \
-    -v "$(pwd)/pydeep":/workspace/pydeep \
-    -d codebasic/pydeep
+docker run --name pydeep --gpus=all --shm-size=2g -p 8888:8888 -v "$(pwd)":/workspace -d codebasic/pydeep
 ```
 
 Powershell
 
 파워쉘은 기존 쉘과 문법 차이가 있습니다.
 
-* 명령줄에서 탈출문자가 백틱(`)으로, 유닉스 계열의 역슬래시(```\```)와 구분됩니다.
 * 윈도우 경로 구분자는 역슬래시(`\`)로 유닉스 계열의 경로 구분자인 슬래시(`/`)와 차이가 있습니다.  
   바인드 마운트 시, 윈도우 호스트 경로에서 사용하는 경로 구분자와 리눅스 컨테이너 경로 작성 시 유의해야 합니다.  
 * 현재 경로값 획득 시, 경로 치환 방식이 다릅니다: POSIX Shell은 `$(pwd)`처럼 명령 치환을 쓰고, PowerShell은 현재 경로값을 담은 변수 `${pwd}` 를 사용합니다.
 
 ```powershell
-docker run --name pydeep --gpus=all --shm-size=2g -p 8888:8888 `
-    -v "${pwd}\pydeep":/workspace/pydeep `
-    -d codebasic/pydeep
+docker run --name pydeep --gpus=all --shm-size=2g -p 8888:8888 -v "${pwd}:/workspace" -d codebasic/pydeep
 ```
 
 #### GPU 확인
