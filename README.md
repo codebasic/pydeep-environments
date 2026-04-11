@@ -71,8 +71,6 @@ docker load --input pydeep.tar
 호스트 디렉터리를 컨테이너에 [바인드 마운트(bind mount)](https://docs.docker.com/engine/storage/bind-mounts/)하여 실행합니다.
 실습을 진행할 디렉토리로 이동한 뒤, 다음 명령을 실행합니다.
 
-```sh
-
 Powershell
 
 ```powershell
