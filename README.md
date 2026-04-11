@@ -52,10 +52,37 @@ Codebasic (c) 2015-2025
 
 ### 도커 컨테이너 실행
 
-최초 실행 시, 도커 이미지([codebasic/pydeep](https://hub.docker.com/r/codebasic/pydeep)) 다운로드가 실행됩니다.
+최초 실행 시, 도커 이미지([codebasic/pydeep](https://hub.docker.com/r/codebasic/pydeep))를 획득합니다.
+
+Docker Hub에서 이미지를 다운로드하는 명령은 다음과 같습니다.
 
 ```sh
-docker run --name pydeep --gpus=all --shm-size=2g -p 8888:8888 -d codebasic/pydeep
+docker pull codebasic/pydeep
+```
+
+도커 이미지 파일에서 직접 로드하는 경우, 다음 명령을 사용합니다.
+
+```sh
+docker load --input pydeep.tar
+```
+
+#### 활용 예시
+
+호스트 디렉터리를 컨테이너에 [바인드 마운트(bind mount)](https://docs.docker.com/engine/storage/bind-mounts/)하여 실행합니다.
+실습을 진행할 디렉토리로 이동한 뒤, 다음 명령을 실행합니다.
+
+```sh
+
+Powershell
+
+```powershell
+docker run --name pydeep --gpus=all --shm-size=2g -p 8888:8888 -v "${pwd}:/workspace" -d codebasic/pydeep
+```
+
+POSIX Shell (bash/zsh 등)
+
+```bash
+docker run --name pydeep --gpus=all --shm-size=2g -p 8888:8888 -v "$(pwd)":/workspace -d codebasic/pydeep
 ```
 
 주요 설정
@@ -68,28 +95,6 @@ docker run --name pydeep --gpus=all --shm-size=2g -p 8888:8888 -d codebasic/pyde
     다음 중 하나의 설정을 권장합니다.  
     1. 공유 메모리 크기 설정 (`shm-size`)
     2. [호스트 공유 메모리 활용](https://docs.docker.com/reference/cli/docker/container/run/#ipc)
-
-#### 활용 예시
-
-호스트 디렉터리를 컨테이너에 [바인드 마운트(bind mount)](https://docs.docker.com/engine/storage/bind-mounts/)하여 실행합니다.
-
-POSIX Shell (bash/zsh 등)
-
-```bash
-docker run --name pydeep --gpus=all --shm-size=2g -p 8888:8888 -v "$(pwd)":/workspace -d codebasic/pydeep
-```
-
-Powershell
-
-파워쉘은 기존 쉘과 문법 차이가 있습니다.
-
-* 윈도우 경로 구분자는 역슬래시(`\`)로 유닉스 계열의 경로 구분자인 슬래시(`/`)와 차이가 있습니다.  
-  바인드 마운트 시, 윈도우 호스트 경로에서 사용하는 경로 구분자와 리눅스 컨테이너 경로 작성 시 유의해야 합니다.  
-* 현재 경로값 획득 시, 경로 치환 방식이 다릅니다: POSIX Shell은 `$(pwd)`처럼 명령 치환을 쓰고, PowerShell은 현재 경로값을 담은 변수 `${pwd}` 를 사용합니다.
-
-```powershell
-docker run --name pydeep --gpus=all --shm-size=2g -p 8888:8888 -v "${pwd}:/workspace" -d codebasic/pydeep
-```
 
 #### GPU 확인
 
@@ -118,7 +123,7 @@ docker exec pydeep jupyter server list
 * 파워쉘(Windows PowerShell)
 
 ```powershell
- "http://localhost:8888/?token=$(((docker exec pydeep jupyter server list | sls 'token=([a-z0-9]+)').Matches)[-1].Groups[1].Value)"
+"http://localhost:8888/?token=$(((docker exec pydeep jupyter server list | sls 'token=([a-z0-9]+)').Matches)[-1].Groups[1].Value)"
 ```
 
 * POSIX 쉘 (bash/zsh 등)
