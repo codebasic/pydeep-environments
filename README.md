@@ -111,18 +111,20 @@ nvidia-smi
 docker exec pydeep jupyter server list
 ```
 
-컨테이너 내부의 URL은 호스트의 `localhost`로 접속해야 합니다. 다음 명령으로 호스트 주소로 치환할 수 있습니다.
+컨테이너의 Jupyter 서버는 포트 포워딩(-p 8888:8888)이 설정된 경우,
+호스트의 localhost로 접속할 수 있습니다.
+토큰 값을 포함한 URL을 얻는 방법은 다음과 같습니다.
 
 * 파워쉘(Windows PowerShell)
 
 ```powershell
-docker exec pydeep jupyter server list | ForEach-Object { $_ -replace 'http://[^:]+', 'http://localhost' }
+ "http://localhost:8888/?token=$(((docker exec pydeep jupyter server list | sls 'token=([a-z0-9]+)').Matches)[-1].Groups[1].Value)"
 ```
 
 * POSIX 쉘 (bash/zsh 등)
   
 ```sh
-docker exec pydeep jupyter server list | sed -E 's#http://[^:]+#http://localhost#'
+echo "http://localhost:8888/?token=$(docker exec pydeep jupyter server list | sed -nE 's/.*token=([a-z0-9]+).*/\1/p' | tail -n 1)"
 ```
 
 ## 직접 설치
