@@ -80,7 +80,7 @@ docker run --name pydeep --gpus=all --shm-size=2g -p 8888:8888 -v "${pwd}:/works
 POSIX Shell (bash/zsh 등)
 
 ```bash
-docker run --name pydeep --gpus=all --shm-size=2g -p 8888:8888 -v "$(pwd)":/workspace -d codebasic/pydeep
+docker run --name pydeep --gpus=all --shm-size=2g -p 8888:8888 -v "$(pwd):/workspace" -d codebasic/pydeep
 ```
 
 주요 설정
