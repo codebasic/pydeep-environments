@@ -116,7 +116,14 @@ docker logs pydeep
 * 이미지 파일로 전달받은 경우: `docker load --input pydeep.tar` 후 태그를 확인합니다.
 * 포트·공유 메모리·마운트 옵션: [포트 게시](https://docs.docker.com/engine/network/port-publishing/), [바인드 마운트](https://docs.docker.com/engine/storage/bind-mounts/), [공유 메모리](https://docs.docker.com/reference/cli/docker/container/run/#ipc)를 참조합니다.
 * `26.10`과 `latest`의 확인된 digest는 `sha256:6a364b060331a42b2c54d3441aa228031773ea504b5c483487105dd7902ec47d`입니다. `latest`는 이후 변경될 수 있습니다.
-* Claude Code·Codex CLI와 인증용 named volume은 개별 실습 머신에서 추가한 구성입니다. 공용 이미지 기본 제공 항목이 아닙니다.
+
+## 코드 에이전트
+
+Claude Code와 OpenAI Codex CLI는 공용 `pydeep` 이미지에 기본 포함되어 있지 않습니다.
+필요한 도구를 별도로 설치하고, 각 공식 문서의 설치·로그인 안내를 따릅니다.
+
+* [Claude Code 설치 안내](https://code.claude.com/docs/en/setup#install-claude-code)
+* [OpenAI Codex CLI 설치 안내](https://learn.chatgpt.com/docs/codex/cli)
 
 ## 직접 설치
 
