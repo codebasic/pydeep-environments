@@ -119,7 +119,13 @@ docker logs pydeep
 
 ## 코드 에이전트
 
-코드 에이전트를 사용하려면 아래 공식 문서를 참고해 설치하세요.
+코드 에이전트를 사용하려면 호스트 터미널에서 다음 명령으로 실행 중인 컨테이너에 진입합니다.
+
+```sh
+docker exec -it --user me pydeep bash
+```
+
+컨테이너 안에서 아래 공식 문서를 참고해 원하는 코드 에이전트를 설치하세요.
 설치 명령과 인증 방법은 변경될 수 있으므로, 각 공식 문서의 최신 안내를 참조하세요.
 
 * [Claude Code 설치 안내](https://code.claude.com/docs/en/setup#install-claude-code)
