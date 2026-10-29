@@ -119,17 +119,20 @@ docker logs pydeep
 
 ## 코드 에이전트
 
-코드 에이전트를 사용하려면 호스트 터미널에서 다음 명령으로 실행 중인 컨테이너에 진입합니다.
+1. Docker가 실행 중인 **호스트 터미널**에서 실행 중인 컨테이너에 진입합니다.
 
-```sh
-docker exec -it pydeep bash
-```
+   ```sh
+   docker exec -it pydeep bash
+   ```
 
-컨테이너 안에서 아래 공식 문서를 참고해 원하는 코드 에이전트를 설치하세요.
-설치 명령과 인증 방법은 변경될 수 있으므로, 각 공식 문서의 최신 안내를 참조하세요.
+2. 진입한 **Linux 컨테이너 안에서** 원하는 코드 에이전트를 설치합니다. 아래 공식 문서의 **Linux 설치 절차**를 따르세요. 호스트가 Mac이나 Windows여도 컨테이너에서는 Linux용 안내를 사용합니다.
 
-* [Claude Code 설치 안내](https://code.claude.com/docs/en/setup#install-claude-code)
-* [OpenAI Codex CLI 설치 안내](https://learn.chatgpt.com/docs/codex/cli)
+   * [Claude Code 설치 안내](https://code.claude.com/docs/en/setup#install-claude-code)
+   * [OpenAI Codex CLI 설치 안내](https://learn.chatgpt.com/docs/codex/cli)
+
+3. 각 공식 문서에 따라 인증한 뒤 **같은 컨테이너 안에서** 코드 에이전트를 실행합니다.
+
+설치 명령과 인증 방법은 변경될 수 있으므로 각 공식 문서의 최신 안내를 참조하세요.
 
 ## 직접 설치
 
