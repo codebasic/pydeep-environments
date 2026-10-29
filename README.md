@@ -48,10 +48,11 @@ NVIDIA GPU를 사용하지 않는 컴퓨터에서는 `--gpus=all`을 제외합�
 공유 메모리는 `--shm-size=2g`로 확보합니다. Linux에서는 필요에 따라 `--ipc=host`로 대체할 수 있습니다.
 
 실행 후 웹브라우저에서 **[http://127.0.0.1:8888/lab](http://127.0.0.1:8888/lab)** 을 엽니다.
-JupyterLab은 자동으로 시작되며 토큰과 비밀번호 없이 접속합니다.
 Windows에서 `localhost` 접속이 지연되면 위의 `127.0.0.1` 주소를 사용합니다.
 
 > **외부 연결 차단:** 현재 컴퓨터에서만 접속하려면 `-p 127.0.0.1:8888:8888`을 사용합니다. 기본 설정은 외부에서 도달 가능한 환경에서 무인증 접속을 허용합니다. Compose에서도 포트에 `127.0.0.1`을 지정해 외부 연결을 차단합니다(예: `127.0.0.1:8888:8888`, `127.0.0.1:6006:6006`).
+
+> **인증 설정:** 인증이 필요한 경우 [Jupyter Server 공식 인증 설정 안내](https://jupyter-server.readthedocs.io/en/latest/operators/public-server.html#securing-a-jupyter-server)를 참조합니다.
 
 노트북에서 실습용 Python 커널을 선택합니다. 실습 파일은 `/workspace` 아래에 저장해야 호스트 폴더에 남습니다.
 
