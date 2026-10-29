@@ -52,83 +52,71 @@ Codebasic (c) 2015-2025
 
 ### 도커 컨테이너 실행
 
-최초 실행 시, 도커 이미지([codebasic/pydeep](https://hub.docker.com/r/codebasic/pydeep))를 획득합니다.
+공용 이미지 `codebasic/pydeep:26.10`은 Linux x86-64 (`linux/amd64`)용입니다.
+JupyterLab 4.6.4, Python 3.12.16 실습 커널, 한국어 팩과 Codebasic 로고가 포함되어 있습니다.
+Matplotlib은 홈 설정의 Noto Sans CJK KR 글꼴과 DejaVu Sans 수식 글꼴을 사용하며,
+유니코드 마이너스 표시를 지원합니다. Conda와 uv 구성은 유지했고, ML/DL 라이브러리 전반을 일괄 업그레이드한 이미지는 아닙니다.
 
-Docker Hub에서 이미지를 다운로드하는 명령은 다음과 같습니다.
-
-```sh
-docker pull codebasic/pydeep
-```
-
-도커 이미지 파일에서 직접 로드하는 경우, 다음 명령을 사용합니다.
+먼저 이미지를 받습니다. 재현 가능한 실습에는 `latest` 대신 `26.10` 태그를 사용합니다.
 
 ```sh
-docker load --input pydeep.tar
+docker pull codebasic/pydeep:26.10
 ```
 
-#### 활용 예시
+실습 파일을 보관할 폴더로 이동한 뒤 실행합니다. 현재 폴더가 컨테이너의 `/workspace`에 연결됩니다.
 
-호스트 디렉터리를 컨테이너에 [바인드 마운트(bind mount)](https://docs.docker.com/engine/storage/bind-mounts/)하여 실행합니다.
-실습을 진행할 디렉토리로 이동한 뒤, 다음 명령을 실행합니다.
-
-Powershell
+PowerShell:
 
 ```powershell
-docker run --name pydeep --gpus=all --shm-size=2g -p 8888:8888 -v "${pwd}:/workspace" -d codebasic/pydeep
+docker run --name pydeep --gpus=all --shm-size=2g -p 127.0.0.1:8888:8888 -v "${pwd}:/workspace" -d codebasic/pydeep:26.10
 ```
 
-POSIX Shell (bash/zsh 등)
+bash/zsh:
 
 ```bash
-docker run --name pydeep --gpus=all --shm-size=2g -p 8888:8888 -v "$(pwd):/workspace" -d codebasic/pydeep
+docker run --name pydeep --gpus=all --shm-size=2g -p 127.0.0.1:8888:8888 -v "$(pwd):/workspace" -d codebasic/pydeep:26.10
 ```
 
-주요 설정
+NVIDIA GPU를 사용하지 않는 컴퓨터에서는 `--gpus=all`을 제외합니다.
+공유 메모리는 `--shm-size=2g`로 확보합니다. Linux에서 필요하면 기존 방식인 `--ipc=host`로 대체할 수 있습니다.
 
-* [GPU 접근](https://docs.docker.com/engine/containers/resource_constraints/#gpu)
-* [포트 연결](https://docs.docker.com/engine/network/port-publishing/)  
-    주피터 서버 접근을 위해 호스트 포트를 컨테이너 내부 포트에 연결합니다.
-* 공유 메모리  
-    도커 컨테이너 공유 메모리 (shared memory) 크기 기본값(64MB)이 작아서 멀티 프로세스가 실패할 수 있습니다. ([도커 컨테이너 자원 제한](https://docs.docker.com/engine/containers/run/#runtime-constraints-on-resources))  
-    다음 중 하나의 설정을 권장합니다.  
-    1. 공유 메모리 크기 설정 (`shm-size`)
-    2. [호스트 공유 메모리 활용](https://docs.docker.com/reference/cli/docker/container/run/#ipc)
+실행 후 웹브라우저에서 **[http://127.0.0.1:8888/lab](http://127.0.0.1:8888/lab)** 을 엽니다.
+기본 명령 `jupyter lab`이 컨테이너 내부 `0.0.0.0:8888`에서 자동 실행되므로 별도 설치나 서버 시작 명령이 필요하지 않습니다.
+토큰과 비밀번호 없이 접속합니다. Windows에서 `localhost`의 IPv6 경로가 시간 초과될 수 있어 `127.0.0.1`을 권장합니다.
 
-#### GPU 확인
+> 무인증 서버의 공개 범위는 Docker 포트 게시 설정에 달려 있습니다. 위 예시는 호스트의 IPv4 루프백에만 연결하며, `-p 8888:8888`은 외부 접근을 허용할 수 있습니다.
 
-컨테이너 내부 쉘에서 다음 명령으로 GPU 인식 여부를 확인합니다.
+노트북에서는 Python 3.12.16 실습 커널을 선택합니다. 실습 파일은 `/workspace` 아래에 저장해야 호스트 폴더에 남습니다.
+
+#### 다시 실행·문제 확인
+
+이미 만든 컨테이너는 새로 만들지 않고 시작합니다.
 
 ```sh
-nvidia-smi
+docker start pydeep
 ```
 
-#### 주피터 서버
+기존 컨테이너에는 새 이미지를 받아도 자동 적용되지 않습니다. 교체 전 `/workspace` 바깥에 저장한 파일도 따로 보관하고,
+기존 컨테이너를 중지·제거한 뒤 같은 작업 폴더로 위 실행 명령을 사용합니다.
 
-컨테이너에서 주피터(jupyter) 서버가 실행 중인 경우, 호스트 웹브라우저에서 다음 주소로 접속합니다.
-
-`http://localhost:8888`
-
-토큰 값이 필요한 경우, 도커 컨테이너 쉘에서 다음 명령으로 토큰 값을 확인합니다.
+접속이 안 되면 컨테이너 상태와 로그를 확인합니다.
 
 ```sh
-docker exec pydeep jupyter server list
+docker ps -a --filter name=pydeep
+docker logs pydeep
 ```
 
-컨테이너의 Jupyter 서버는 포트 포워딩(-p 8888:8888)이 설정된 경우,
-호스트의 localhost로 접속할 수 있습니다.
-토큰 값을 포함한 URL을 얻는 방법은 다음과 같습니다.
+#### 선택: 고급 설정·확인
 
-* 파워쉘(Windows PowerShell)
+저장소의 `compose.yaml`을 사용하는 경우 실습 폴더에 파일을 놓고 `docker compose up -d`로 시작할 수 있습니다.
+현재 폴더를 `/workspace`에 연결하며, 공유 메모리는 기존 예시대로 4GB를 사용합니다. GPU가 없으면 `gpus: all`을 제외합니다.
+홈에 포함된 Matplotlib 설정을 그대로 사용하므로 별도 `matplotlibrc` 마운트는 필요하지 않습니다.
 
-```powershell
-"http://localhost:8888/?token=$(((docker exec pydeep jupyter server list | sls 'token=([a-z0-9]+)').Matches)[-1].Groups[1].Value)"
-```
-
-* POSIX 쉘 (bash/zsh 등)
-  
-```sh
-echo "http://localhost:8888/?token=$(docker exec pydeep jupyter server list | sed -nE 's/.*token=([a-z0-9]+).*/\1/p' | tail -n 1)"
-```
+* GPU 확인: 호스트에서 `docker exec pydeep nvidia-smi`를 실행합니다.
+* 이미지 파일로 전달받은 경우: `docker load --input pydeep.tar` 후 태그를 확인합니다.
+* 포트·공유 메모리·마운트 옵션: [포트 게시](https://docs.docker.com/engine/network/port-publishing/), [바인드 마운트](https://docs.docker.com/engine/storage/bind-mounts/), [공유 메모리](https://docs.docker.com/reference/cli/docker/container/run/#ipc)를 참조합니다.
+* `26.10`과 `latest`의 확인된 digest는 `sha256:6a364b060331a42b2c54d3441aa228031773ea504b5c483487105dd7902ec47d`입니다. `latest`는 이후 변경될 수 있습니다.
+* Claude Code·Codex CLI와 인증용 named volume은 개별 실습 머신에서 추가한 구성입니다. 공용 이미지 기본 제공 항목이 아닙니다.
 
 ## 직접 설치
 
