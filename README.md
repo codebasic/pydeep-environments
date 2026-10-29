@@ -11,7 +11,7 @@ Windows와 Linux에서는 Docker를, Mac에서는 직접 설치를 권장합니�
 ### Windows
 
 [Docker Desktop for Windows 설치 안내](https://docs.docker.com/desktop/install/windows-install)에 따라 WSL 2 기반으로 설치하고 Docker Desktop을 실행합니다.
-요구사항과 라이선스 조건은 공식 문서를 확인하세요.
+요구사항과 라이선스 조건은 공식 문서를 확인합니다.
 
 WSL 설치·업데이트가 필요하면 [WSL 설치 안내](https://learn.microsoft.com/ko-kr/windows/wsl/install)를 따릅니다.
 
@@ -20,7 +20,7 @@ NVIDIA GPU를 사용하려면 [드라이버](https://www.nvidia.co.kr/drivers)�
 
 ### Linux
 
-리눅스는 각 배포판별 도커 설치 절차를 참조하시기 바랍니다.
+리눅스는 각 배포판별 도커 설치 절차를 참조합니다.
 
 [Docker Engine 설치 안내 (Install Docker Engine)](https://docs.docker.com/engine/install/)
 
@@ -49,7 +49,7 @@ NVIDIA GPU를 사용하지 않는 컴퓨터에서는 `--gpus=all`을 제외합�
 
 실행 후 웹브라우저에서 **[http://127.0.0.1:8888/lab](http://127.0.0.1:8888/lab)** 을 엽니다.
 JupyterLab은 자동으로 시작되며 토큰과 비밀번호 없이 접속합니다.
-Windows에서 `localhost` 접속이 지연되면 위의 `127.0.0.1` 주소를 사용하세요.
+Windows에서 `localhost` 접속이 지연되면 위의 `127.0.0.1` 주소를 사용합니다.
 
 > 위 예시는 현재 컴퓨터에서만 접속할 수 있습니다. `-p 8888:8888`로 변경하면 무인증 서버가 외부에 노출될 수 있습니다.
 
@@ -90,14 +90,14 @@ docker logs pydeep
    docker exec -it pydeep bash
    ```
 
-2. 진입한 **Linux 컨테이너 안에서** 원하는 코드 에이전트를 설치합니다. 아래 공식 문서의 **Linux 설치 절차**를 따르세요. 호스트가 Mac이나 Windows여도 컨테이너에서는 Linux용 안내를 사용합니다.
+2. 진입한 **Linux 컨테이너 안에서** 원하는 코드 에이전트를 설치합니다. 아래 공식 문서의 **Linux 설치 절차**를 따릅니다. 호스트가 Mac이나 Windows여도 컨테이너에서는 Linux용 안내를 사용합니다.
 
    * [Claude Code 설치 안내](https://code.claude.com/docs/en/setup#install-claude-code)
    * [OpenAI Codex CLI 설치 안내](https://learn.chatgpt.com/docs/codex/cli)
 
 3. 각 공식 문서에 따라 인증한 뒤 **같은 컨테이너 안에서** 코드 에이전트를 실행합니다.
 
-설치 명령과 인증 방법은 변경될 수 있으므로 각 공식 문서의 최신 안내를 참조하세요.
+설치 명령과 인증 방법은 변경될 수 있으므로 각 공식 문서의 최신 안내를 참조합니다.
 
 ## 직접 설치
 
