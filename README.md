@@ -35,13 +35,13 @@ docker pull codebasic/pydeep:26.10
 PowerShell:
 
 ```powershell
-docker run --name pydeep --gpus=all --shm-size=2g -p 127.0.0.1:8888:8888 -v "${pwd}:/workspace" -d codebasic/pydeep:26.10
+docker run --name pydeep --gpus=all --shm-size=2g -p 8888:8888 -v "${pwd}:/workspace" -d codebasic/pydeep:26.10
 ```
 
 bash/zsh:
 
 ```bash
-docker run --name pydeep --gpus=all --shm-size=2g -p 127.0.0.1:8888:8888 -v "$(pwd):/workspace" -d codebasic/pydeep:26.10
+docker run --name pydeep --gpus=all --shm-size=2g -p 8888:8888 -v "$(pwd):/workspace" -d codebasic/pydeep:26.10
 ```
 
 NVIDIA GPU를 사용하지 않는 컴퓨터에서는 `--gpus=all`을 제외합니다.
@@ -51,7 +51,7 @@ NVIDIA GPU를 사용하지 않는 컴퓨터에서는 `--gpus=all`을 제외합�
 JupyterLab은 자동으로 시작되며 토큰과 비밀번호 없이 접속합니다.
 Windows에서 `localhost` 접속이 지연되면 위의 `127.0.0.1` 주소를 사용합니다.
 
-> 위 예시는 현재 컴퓨터에서만 접속할 수 있습니다. `-p 8888:8888`로 변경하면 무인증 서버가 외부에 노출될 수 있습니다.
+> **외부 연결 차단:** 현재 컴퓨터에서만 접속하려면 `-p 127.0.0.1:8888:8888`을 사용합니다. 기본 설정은 외부에서 도달 가능한 환경에서 무인증 접속을 허용합니다. Compose에서도 포트에 `127.0.0.1`을 지정해 외부 연결을 차단합니다(예: `127.0.0.1:8888:8888`, `127.0.0.1:6006:6006`).
 
 노트북에서 실습용 Python 커널을 선택합니다. 실습 파일은 `/workspace` 아래에 저장해야 호스트 폴더에 남습니다.
 

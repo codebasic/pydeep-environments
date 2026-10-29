@@ -5,8 +5,8 @@ services:
     gpus: all
     shm_size: 4g
     ports:
-      - "127.0.0.1:8888:8888"  # JupyterLab
-      - "127.0.0.1:6006:6006"  # Map host port 6006 to container port 6006 (TensorBoard)
+      - "8888:8888"  # JupyterLab
+      - "6006:6006"  # Map host port 6006 to container port 6006 (TensorBoard)
     volumes:
       - type: bind
         source: .
