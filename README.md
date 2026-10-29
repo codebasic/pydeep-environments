@@ -122,7 +122,7 @@ docker logs pydeep
 코드 에이전트를 사용하려면 호스트 터미널에서 다음 명령으로 실행 중인 컨테이너에 진입합니다.
 
 ```sh
-docker exec -it --user me pydeep bash
+docker exec -it pydeep bash
 ```
 
 컨테이너 안에서 아래 공식 문서를 참고해 원하는 코드 에이전트를 설치하세요.
