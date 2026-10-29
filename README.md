@@ -120,7 +120,7 @@ docker logs pydeep
 ## 코드 에이전트
 
 Claude Code와 OpenAI Codex CLI는 공용 `pydeep` 이미지에 기본 포함되어 있지 않습니다.
-필요한 도구를 별도로 설치하고, 각 공식 문서의 설치·로그인 안내를 따릅니다.
+설치 명령과 인증 방법은 변경될 수 있으므로, 각 공식 문서의 최신 안내를 참조하세요.
 
 * [Claude Code 설치 안내](https://code.claude.com/docs/en/setup#install-claude-code)
 * [OpenAI Codex CLI 설치 안내](https://learn.chatgpt.com/docs/codex/cli)
