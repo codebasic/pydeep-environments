@@ -15,7 +15,11 @@ Windows와 Linux에서는 도커를, Mac에서는 직접 설치를 권장합니�
 [Docker Desktop for Windows 설치 안내](https://docs.docker.com/desktop/install/windows-install)에 따라 WSL 2 기반으로 설치하고 Docker Desktop을 실행합니다.
 요구사항과 라이선스 조건은 공식 문서를 확인합니다.
 
-WSL 설치·업데이트가 필요하면 [WSL 설치 안내](https://learn.microsoft.com/ko-kr/windows/wsl/install)를 따릅니다.
+WSL 설치·업데이트가 필요하면 [WSL 설치 안내](https://learn.microsoft.com/ko-kr/windows/wsl/install)를 따릅니다. 이미 설치되어 있다면 PowerShell에서 다음 명령으로 업데이트합니다.
+
+```powershell
+wsl --update
+```
 
 NVIDIA GPU를 사용하려면 [드라이버](https://www.nvidia.co.kr/drivers)를 설치하고
 [Docker Desktop의 GPU 지원 안내](https://docs.docker.com/desktop/features/gpu)를 확인합니다.
@@ -48,19 +52,18 @@ bash/zsh:
 docker run --name pydeep --gpus=all --shm-size=2g -p 8888:8888 -v "$(pwd):/workspace" -d codebasic/pydeep
 ```
 
-NVIDIA GPU를 사용하지 않는 컴퓨터에서는 `--gpus=all`을 제외합니다.
-공유 메모리는 `--shm-size=2g`로 확보합니다. Linux에서는 필요에 따라 `--ipc=host`로 대체할 수 있습니다.
-
-실행 후 웹브라우저에서 **[http://127.0.0.1:8888/lab](http://127.0.0.1:8888/lab)** 을 엽니다.
-Windows에서 `localhost` 접속이 지연되면 위의 `127.0.0.1` 주소를 사용합니다.
-
-> **외부 연결 차단:** 현재 컴퓨터에서만 접속하려면 `-p 127.0.0.1:8888:8888`을 사용합니다. 기본 설정은 외부에서 도달 가능한 환경에서 무인증 접속을 허용합니다. Compose에서도 포트에 `127.0.0.1`을 지정해 외부 연결을 차단합니다(예: `127.0.0.1:8888:8888`, `127.0.0.1:6006:6006`).
-
-> **인증 설정:** 인증이 필요한 경우 [Jupyter Server 공식 인증 설정 안내](https://jupyter-server.readthedocs.io/en/latest/operators/public-server.html#securing-a-jupyter-server)를 참조합니다.
+실행 후 웹브라우저에서 **[http://localhost:8888/lab](http://localhost:8888/lab)** 을 엽니다.
 
 노트북에서 실습용 Python 커널을 선택합니다. 실습 파일은 `/workspace` 아래에 저장해야 호스트 폴더에 남습니다.
 
-#### 다시 실행·문제 확인
+> [!NOTE]
+> * **접속 지연:** Windows에서 접속이 지연되면 `localhost` 대신 `127.0.0.1`을 사용합니다.
+> * **GPU:** NVIDIA GPU를 사용하지 않는 컴퓨터에서는 `--gpus=all`을 제외합니다.
+> * **공유 메모리:** `--shm-size=2g`로 확보합니다. 필요에 따라 `--ipc=host`로 대체할 수 있습니다.
+> * **외부 연결 차단:** 현재 컴퓨터에서만 접속하려면 `-p 127.0.0.1:8888:8888`을 사용합니다. 기본 설정은 외부에서 도달 가능한 환경에서 무인증 접속을 허용합니다. Compose에서도 포트에 `127.0.0.1`을 지정해 외부 연결을 차단합니다(예: `127.0.0.1:8888:8888`, `127.0.0.1:6006:6006`).
+> * **인증 설정:** 인증이 필요한 경우 [Jupyter Server 공식 인증 설정 안내](https://jupyter-server.readthedocs.io/en/latest/operators/public-server.html#securing-a-jupyter-server)를 참조합니다.
+
+#### 컨테이너 관리
 
 이미 만든 컨테이너는 새로 만들지 않고 시작합니다.
 
@@ -70,13 +73,6 @@ docker start pydeep
 
 기존 컨테이너에는 새 이미지를 받아도 자동 적용되지 않습니다. 교체 전 `/workspace` 바깥에 저장한 파일도 따로 보관하고,
 기존 컨테이너를 중지·제거한 뒤 같은 작업 폴더로 위 실행 명령을 사용합니다.
-
-접속이 안 되면 컨테이너 상태와 로그를 확인합니다.
-
-```sh
-docker ps -a --filter name=pydeep
-docker logs pydeep
-```
 
 #### 선택: 고급 설정·확인
 
