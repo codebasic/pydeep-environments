@@ -1,12 +1,14 @@
 # 딥러닝 환경 설정
 
-Codebasic (c) 2015-2025
+Codebasic (c) 2015-2026
 
-Windows와 Linux에서는 Docker를, Mac에서는 직접 설치를 권장합니다.
+Windows와 Linux에서는 도커를, Mac에서는 직접 설치를 권장합니다.
 
-## Docker
+## 도커
 
-아래 Docker 명령은 **호스트 터미널**에서 실행합니다.
+도커는 애플리케이션 실행에 필요한 소프트웨어와 라이브러리를 컨테이너 이미지로 구성해, 여러 컴퓨터에서 일관된 환경을 제공하는 데 유용합니다. 강의·실습 환경을 이미지로 미리 준비하면 각 컴퓨터의 설치와 설정을 단순화할 수 있습니다.
+
+실행에 필요한 데이터·모델·추가 의존성은 환경에 맞게 준비하고, 사용할 컴퓨터에서 실습이 정상적으로 실행되는지 확인합니다.
 
 ### Windows
 
@@ -26,22 +28,24 @@ NVIDIA GPU를 사용하려면 [드라이버](https://www.nvidia.co.kr/drivers)�
 
 ### 도커 컨테이너 실행
 
+아래 도커 명령은 **호스트 터미널**에서 실행합니다.
+
 ```sh
-docker pull codebasic/pydeep:26.10
+docker pull codebasic/pydeep
 ```
 
-실습 파일을 보관할 폴더로 이동한 뒤 실행합니다. 현재 폴더가 컨테이너의 `/workspace`에 연결됩니다.
+실습 파일을 보관할 폴더로 이동한 뒤 아래 명령을 실행합니다. 현재 폴더가 컨테이너의 `/workspace`에 연결됩니다. GPU 사용 여부와 포트 등은 환경에 맞게 조정합니다.
 
 PowerShell:
 
 ```powershell
-docker run --name pydeep --gpus=all --shm-size=2g -p 8888:8888 -v "${pwd}:/workspace" -d codebasic/pydeep:26.10
+docker run --name pydeep --gpus=all --shm-size=2g -p 8888:8888 -v "${pwd}:/workspace" -d codebasic/pydeep
 ```
 
 bash/zsh:
 
 ```bash
-docker run --name pydeep --gpus=all --shm-size=2g -p 8888:8888 -v "$(pwd):/workspace" -d codebasic/pydeep:26.10
+docker run --name pydeep --gpus=all --shm-size=2g -p 8888:8888 -v "$(pwd):/workspace" -d codebasic/pydeep
 ```
 
 NVIDIA GPU를 사용하지 않는 컴퓨터에서는 `--gpus=all`을 제외합니다.
@@ -85,7 +89,7 @@ docker logs pydeep
 
 ## 코드 에이전트
 
-1. Docker가 실행 중인 **호스트 터미널**에서 실행 중인 컨테이너에 진입합니다.
+1. 도커가 실행 중인 **호스트 터미널**에서 실행 중인 컨테이너에 진입합니다.
 
    ```sh
    docker exec -it pydeep bash
@@ -102,7 +106,7 @@ docker logs pydeep
 
 ## 직접 설치
 
-아래 명령은 Docker를 사용하지 않고 **호스트 터미널**에서 직접 환경을 구성하는 경우에 실행합니다.
+아래 명령은 도커를 사용하지 않고 **호스트 터미널**에서 직접 환경을 구성하는 경우에 실행합니다.
 
 ### Miniforge 설치
 

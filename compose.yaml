@@ -1,6 +1,6 @@
 services:
   pydeep:
-    image: codebasic/pydeep:26.10
+    image: codebasic/pydeep
     container_name: pydeep
     gpus: all
     shm_size: 4g
