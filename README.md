@@ -104,76 +104,29 @@ docker logs pydeep
 
 설치 명령과 인증 방법은 변경될 수 있으므로 각 공식 문서의 최신 안내를 참조합니다.
 
-## 직접 설치
+## 직접 설치 (Mac)
 
-아래 명령은 도커를 사용하지 않고 **호스트 터미널**에서 직접 환경을 구성하는 경우에 실행합니다.
-
-### Miniforge 설치
-
-[conda 설치 (miniforge)](https://conda-forge.org/download/)
-
-### 공통 패키지 설치
+위의 도커 환경에 대응하는 **Apple Silicon Mac용 실습 환경**입니다. Homebrew를 준비하고, 실습 노트북을 보관할 **작업 폴더의 터미널**에서 실행합니다. 해당 폴더의 `.venv`에 패키지와 JupyterLab을 함께 설치합니다.
 
 ```sh
-conda create --name pyml python=3.10
-conda install --name pyml scikit-learn pandas matplotlib ipykernel ipywidgets
+brew install uv libomp
+uv venv --python 3.12
+uv pip install \
+  numpy scipy pandas \
+  scikit-learn matplotlib \
+  xgboost lightgbm \
+  torch torchvision tensorflow keras \
+  jupyterlab ipykernel ipywidgets
 ```
 
-### 딥러닝 프레임워크
-
-#### PyTorch
-
-* 설치 안내: [PyTorch](https://pytorch.org/get-started/locally/) 공식 문서를 참조해 OS/하드웨어에 맞게 설치합니다.
-* 환경 생성: 공통 환경(`pyml`)을 복제해 PyTorch 전용 환경을 만듭니다.
+### JupyterLab 실행
 
 ```sh
-conda create --name pytorch --clone pyml
+KERAS_BACKEND=torch uv run jupyter lab
 ```
 
-##### GPU 가속 확인
+### 유의사항
 
-PyTorch가 정상 설치되고 GPU 가속에 접근 가능한지 확인합니다. 환경을 활성화한 후 다음 명령을 실행합니다.
-
-###### CUDA (Linux/Windows)
-
-```sh
-conda activate pytorch
-python -c "import torch; print('PyTorch Version:', torch.__version__); assert torch.cuda.is_available(), 'CUDA not available'; print('CUDA Device:', torch.cuda.get_device_name(0))"
-```
-
-###### MPS (Mac)
-
-Mac에서는 Metal Performance Shaders(MPS)를 사용합니다.
-
-```sh
-conda activate pytorch
-python -c "import torch; print('PyTorch Version:', torch.__version__); assert torch.backends.mps.is_available(), 'MPS not available'; print('MPS Device:', 'Apple Metal Performance Shaders')"
-```
-
-#### TensorFlow
-
-* 설치 안내: [Tensorflow](https://www.tensorflow.org/install) 공식 문서를 참조해 OS/하드웨어에 맞게 설치합니다.
-* 환경 생성: 공통 환경(`pyml`)을 복제해 TensorFlow 전용 환경을 만듭니다.
-
-```sh
-conda create --name tensorflow --clone pyml
-```
-
-### JupyterLab (선택)
-
-[Astral uv 설치 안내](https://docs.astral.sh/uv/)에 따라 uv를 설치한 뒤 JupyterLab을 실행합니다.
-
-```sh
-uvx --from jupyterlab jupyter-lab
-```
-
-#### 주피터 커널
-
-주피터에서 파이썬 환경을 사용하려면 각 환경을 주피터 커널(kernel)로 등록해야 합니다. 각 환경을 활성화 후, 다음 명령을 실행합니다.
-
-예: PyTorch 환경 등록
-
-```sh
-conda activate pytorch
-python -m ipykernel install --user --name pytorch --display-name "Pytorch 2"
-```
+* Mac은 CUDA 대신 [PyTorch MPS](https://docs.pytorch.org/docs/stable/notes/mps.html)를 사용하며 연산별 지원은 다를 수 있습니다. XGBoost·LightGBM은 CPU로 사용합니다.
+* TensorFlow의 Mac GPU 가속은 별도 [TensorFlow Metal](https://developer.apple.com/metal/tensorflow-plugin/) 플러그인과 버전 호환성 확인이 필요합니다.
+* 작업 폴더에 이미 `.venv`가 있으면 설치 과정에서 갱신될 수 있으니 유의합니다.
