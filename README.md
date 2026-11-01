@@ -101,7 +101,7 @@ docker start pydeep
 
 ## 직접 설치
 
-위의 도커 환경에 대응하는 실습 환경입니다. Mac(Apple Silicon), Linux, Windows(WSL2)에서 사용할 수 있습니다. 실습 노트북을 보관할 **작업 폴더의 터미널**에서 실행하며, 해당 폴더의 `.venv`에 패키지와 JupyterLab을 함께 설치합니다.
+위의 도커 환경에 대응하는 Python 실습 환경입니다. Mac(Apple Silicon), Linux, Windows(WSL2)에서 사용할 수 있습니다. 실습 노트북을 보관할 **작업 폴더의 터미널**에서 실행하며, 해당 폴더의 `.venv`에 패키지와 JupyterLab을 함께 설치합니다.
 
 ### OS별 준비
 
@@ -147,4 +147,5 @@ KERAS_BACKEND=torch uv run jupyter lab
 * Mac은 CUDA 대신 [PyTorch MPS](https://docs.pytorch.org/docs/stable/notes/mps.html)를 사용하며 연산별 지원은 다를 수 있습니다. Mac의 XGBoost·LightGBM은 CPU로 사용합니다.
 * Linux·WSL2의 NVIDIA GPU 가속에는 호환 드라이버와 프레임워크별 CUDA 조건이 필요합니다. [TensorFlow GPU 설치](https://www.tensorflow.org/install/pip)의 `tensorflow[and-cuda]` 추가는 PyTorch와 CUDA 의존성이 충돌할 수 있어 별도 호환성 확인이 필요하며, 위 공통 명령만으로 두 프레임워크의 GPU 동작을 보장하지 않습니다.
 * TensorFlow의 Mac GPU 가속은 별도 [TensorFlow Metal](https://developer.apple.com/metal/tensorflow-plugin/) 플러그인과 버전 호환성 확인이 필요합니다.
+* 직접 설치는 Python 환경만 도커 이미지에 대응하도록 구성했습니다. 운영체제별 상세 설정은 도커 이미지와 다를 수 있습니다.
 * 작업 폴더에 이미 `.venv`가 있으면 설치 과정에서 갱신될 수 있으니 유의합니다.
