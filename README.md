@@ -139,7 +139,7 @@ uv pip install \
 ### JupyterLab 실행
 
 ```sh
-KERAS_BACKEND=torch uv run jupyter lab
+uv run jupyter lab
 ```
 
 ### 유의사항
