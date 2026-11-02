@@ -52,7 +52,7 @@ bash/zsh:
 docker run --name pydeep --gpus=all --shm-size=2g -p 8888:8888 -v "$(pwd):/workspace" -d codebasic/pydeep
 ```
 
-실행 후 웹브라우저에서 **[http://localhost:8888/lab](http://localhost:8888/lab)** 을 엽니다.
+실행 후 웹브라우저에서 **[http://localhost:8888](http://localhost:8888)** 을 엽니다.
 
 노트북에서 실습용 Python 커널을 선택합니다. 실습 파일은 `/workspace` 아래에 저장해야 호스트 폴더에 남습니다.
 
@@ -113,6 +113,12 @@ curl -fsSL https://ollama.com/install.sh | sh
 
 ```sh
 OLLAMA_CONTEXT_LENGTH=65536 nohup ollama serve > /tmp/ollama.log 2>&1 < /dev/null &
+```
+
+사용할 모델을 내려받습니다. 예:
+
+```sh
+ollama pull gemma4
 ```
 
 앞 절에서 설치한 코드 에이전트는 [`ollama launch`](https://docs.ollama.com/cli#launch-integrations)로 연결할 수 있습니다. 컨테이너를 재시작하면 서버 실행 명령도 다시 실행합니다.
