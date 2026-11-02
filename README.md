@@ -99,6 +99,24 @@ docker start pydeep
 
 설치 명령과 인증 방법은 변경될 수 있으므로 각 공식 문서의 최신 안내를 참조합니다.
 
+## 로컬 모델
+
+코드 에이전트는 클라우드 기반 서비스를 사용할 수 있습니다. 보안이나 비용 등의 이유로 클라우드 서비스를 사용하기 어렵다면 [Ollama](https://ollama.com)로 로컬에서 언어 모델을 실행해 채팅과 에이전트로 사용할 수 있습니다.
+
+앞 절처럼 **Linux 컨테이너 안에서** [Ollama를 설치](https://docs.ollama.com/linux)합니다.
+
+```sh
+curl -fsSL https://ollama.com/install.sh | sh
+```
+
+설치 후, 서버를 백그라운드에서 실행합니다.
+
+```sh
+nohup ollama serve > /tmp/ollama.log 2>&1 < /dev/null &
+```
+
+앞 절에서 설치한 코드 에이전트는 [`ollama launch`](https://docs.ollama.com/cli#launch-integrations)로 연결할 수 있습니다. 컨테이너를 재시작하면 서버 실행 명령도 다시 실행합니다.
+
 ## 직접 설치
 
 위의 도커 환경에 대응하는 Python 실습 환경입니다. Mac(Apple Silicon), Linux, Windows(WSL2)에서 사용할 수 있습니다. 실습 노트북을 보관할 **작업 폴더의 터미널**에서 실행하며, 해당 폴더의 `.venv`에 패키지와 JupyterLab을 함께 설치합니다.
