@@ -101,21 +101,9 @@ docker start pydeep
 
 ## 로컬 모델
 
-코드 에이전트는 기본적으로 클라우드 서비스를 이용합니다. 보안이나 비용 등의 이유로 클라우드 서비스를 사용하기 어렵다면 [Ollama](https://ollama.com)로 언어 모델을 로컬에서 실행하고, 채팅과 코드 에이전트에 연결할 수 있습니다.
+보안이나 비용 등의 이유로 클라우드 서비스를 사용하기 어렵다면 [Ollama](https://ollama.com)로 언어 모델을 로컬에서 실행하고 채팅할 수 있습니다.
 
-앞 절처럼 **Linux 컨테이너 안에서** [Ollama를 설치](https://docs.ollama.com/linux)합니다.
-
-```sh
-curl -fsSL https://ollama.com/install.sh | sh
-```
-
-설치 후, 서버를 백그라운드에서 실행합니다. 코드 에이전트에 연결하려면 모델 컨텍스트 크기가 64K 이상이어야 하므로, 서버를 시작할 때 `OLLAMA_CONTEXT_LENGTH` 환경 변수를 지정합니다.
-
-```sh
-OLLAMA_CONTEXT_LENGTH=65536 nohup ollama serve > /tmp/ollama.log 2>&1 < /dev/null &
-```
-
-컨테이너를 재시작하면 서버 실행 명령도 다시 실행합니다.
+Windows 또는 macOS **호스트에** [공식 Ollama 앱](https://ollama.com/download)을 설치하고 실행합니다. 아래 명령은 같은 호스트의 터미널에서 실행합니다. Windows에서는 WSL이 아닌 Windows 터미널을 사용합니다.
 
 사용할 모델을 내려받습니다. 예:
 
@@ -123,19 +111,7 @@ OLLAMA_CONTEXT_LENGTH=65536 nohup ollama serve > /tmp/ollama.log 2>&1 < /dev/nul
 ollama pull gemma4
 ```
 
-### 채팅 인터페이스
-
-[oterm](https://ggozad.github.io/oterm/features/)은 Markdown과 코드 서식을 보여주는 터미널 채팅 UI입니다. Ollama 기본 채팅 대신 사용할 수 있습니다. 서버 기동 후 **같은 컨테이너 안에서** 실행합니다.
-
-```sh
-uvx oterm
-```
-
-첫 실행 시 패키지를 내려받으며, `localhost:11434`의 Ollama를 자동 감지합니다. 화면에서 로컬 모델을 선택해 대화합니다.
-
-### 코드 에이전트 연결
-
-앞 절에서 설치한 코드 에이전트는 [`ollama launch`](https://docs.ollama.com/cli#launch-integrations)로 연결할 수 있습니다.
+내려받은 모델은 Ollama 앱에서 선택해 대화하거나, 터미널에서 `ollama run`으로 실행합니다.
 
 ## 직접 설치
 
